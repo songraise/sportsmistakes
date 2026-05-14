@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SportsMistakes Admin</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #06101a;
+      --card: rgba(14, 30, 47, 0.94);
+      --line: rgba(255,255,255,.12);
+      --text: #ffffff;
+      --muted: #aab7c5;
+      --red: #ff3030;
+      --green: #39df69;
+      --yellow: #ffd12f;
+    }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 70% 20%, rgba(255,48,48,.14), transparent 28%),
+        radial-gradient(circle at 20% 30%, rgba(61,140,255,.16), transparent 30%),
+        linear-gradient(180deg, #03070c, var(--bg));
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      padding: 32px;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 28px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand h1 {
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      font-size: clamp(36px, 5vw, 62px);
+      line-height: .9;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+    .brand h1 span { color: var(--red); display: block; font-style: italic; }
+    .brand p { color: var(--muted); font-weight: 800; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; font-size: 13px; }
+    .status {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      min-width: 230px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .status strong { display: block; color: var(--green); margin-bottom: 4px; }
+    .grid { display: grid; grid-template-columns: .9fr 1.25fr; gap: 18px; align-items: start; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.32);
+    }
+    .card h2 {
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      font-size: 32px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: .2px;
+    }
+    label { display: block; color: var(--muted); font-weight: 900; margin: 14px 0 7px; text-transform: uppercase; font-size: 12px; letter-spacing: .7px; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.24);
+      color: white;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 15px;
+      outline: none;
+    }
+    textarea { min-height: 96px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { border-color: var(--red); }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, #ff3333, #c91622);
+      color: white;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 14px 34px rgba(255,48,48,.22);
+      margin-top: 16px;
+      width: 100%;
+    }
+    .btn.secondary { background: rgba(255,255,255,.08); box-shadow: none; border: 1px solid var(--line); }
+    .btn.green { background: linear-gradient(180deg, #39df69, #15943f); color: #04100a; }
+    .btn.yellow { background: linear-gradient(180deg, #ffd12f, #d99500); color: #150d00; }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .small-note { color: var(--muted); font-size: 13px; line-height: 1.45; margin-top: 12px; }
+    .polls { display: grid; gap: 12px; }
+    .poll {
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .poll-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
+    .poll h3 { font-size: 18px; line-height: 1.25; }
+    .badge {
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .badge.active { background: rgba(57,223,105,.16); color: var(--green); border: 1px solid rgba(57,223,105,.35); }
+    .badge.draft { background: rgba(255,255,255,.08); color: var(--muted); border: 1px solid var(--line); }
+    .badge.closed { background: rgba(255,48,48,.16); color: var(--red); border: 1px solid rgba(255,48,48,.35); }
+    .meta { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+    .bars { display: grid; gap: 8px; margin: 12px 0; }
+    .bar-label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 900; margin-bottom: 5px; }
+    .track { height: 10px; background: rgba(255,255,255,.08); border-radius: 999px; overflow: hidden; }
+    .fill { height: 100%; width: 0%; background: var(--green); border-radius: 999px; }
+    .fill.red { background: var(--red); }
+    .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .actions .btn { margin-top: 0; padding: 11px 10px; font-size: 12px; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%) translateY(20px);
+      background: white;
+      color: #06101a;
+      font-weight: 900;
+      padding: 14px 20px;
+      border-radius: 10px;
+      opacity: 0;
+      transition: .25s;
+      z-index: 20;
+      box-shadow: 0 18px 55px rgba(0,0,0,.45);
+      text-align: center;
+      max-width: calc(100% - 28px);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    @media (max-width: 860px) {
+      body { padding: 20px; }
+      header, .grid { grid-template-columns: 1fr; display: grid; }
+      .row, .actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Sports<span>Mistakes Admin</span></h1>
+        <p>Create polls. Activate chaos. Watch fan verdicts.</p>
+      </div>
+      <div class="status" id="connectionStatus">
+        <strong>Checking...</strong>
+        Supabase connection
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <h2>Create Poll</h2>
+        <form id="pollForm">
+          <label for="question">Poll Question</label>
+          <textarea id="question" required placeholder="Should the coach pull the goalie?"></textarea>
+
+          <div class="row">
+            <div>
+              <label for="option1">Option 1</label>
+              <input id="option1" value="YES" required />
+            </div>
+            <div>
+              <label for="option2">Option 2</label>
+              <input id="option2" value="NO" required />
+            </div>
+          </div>
+
+          <label for="team">Team</label>
+          <input id="team" value="canadiens" required />
+
+          <label for="status">Status</label>
+          <select id="status">
+            <option value="draft">Draft</option>
+            <option value="active">Active</option>
+            <option value="closed">Closed</option>
+          </select>
+
+          <button class="btn" type="submit" id="createBtn">Create Poll</button>
+          <button class="btn secondary" type="button" id="refreshBtn">Refresh Polls</button>
+        </form>
+        <p class="small-note">Prototype note: this admin page uses your public anon key, so keep it local for now. Do not publish this admin page online yet.</p>
+      </section>
+
+      <section class="card">
+        <h2>Poll Control Room</h2>
+        <div class="polls" id="pollsList"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast">Saved</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
+
+    const isSupabaseConfigured =
+      SUPABASE_URL.startsWith("https://") &&
+      SUPABASE_ANON_KEY.length > 40 &&
+      !SUPABASE_URL.includes("PASTE_") &&
+      !SUPABASE_ANON_KEY.includes("PASTE_");
+
+    const supabaseClient = isSupabaseConfigured
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+    const connectionStatus = document.getElementById('connectionStatus');
+    const pollForm = document.getElementById('pollForm');
+    const question = document.getElementById('question');
+    const option1 = document.getElementById('option1');
+    const option2 = document.getElementById('option2');
+    const team = document.getElementById('team');
+    const statusInput = document.getElementById('status');
+    const pollsList = document.getElementById('pollsList');
+    const createBtn = document.getElementById('createBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function setConnection(ok, message) {
+      connectionStatus.innerHTML = ok
+        ? `<strong>Connected ✅</strong>${message}`
+        : `<strong style="color:#ff3030">Not Connected</strong>${message}`;
+    }
+
+    async function testConnection() {
+      if (!supabaseClient) {
+        setConnection(false, 'Add Supabase URL and anon key.');
+        return false;
+      }
+      const { error } = await supabaseClient.from('polls').select('id').limit(1);
+      if (error) {
+        setConnection(false, error.message || 'Could not read polls table.');
+        return false;
+      }
+      setConnection(true, 'Ready to manage polls.');
+      return true;
+    }
+
+    async function getVoteCounts(poll) {
+      const { data, error } = await supabaseClient
+        .from('votes')
+        .select('vote')
+        .eq('poll_id', poll.id);
+
+      if (error) {
+        console.error(error);
+        return { optionOneCount: 0, optionTwoCount: 0, total: 0 };
+      }
+
+      const optionOneCount = data.filter(v => v.vote === poll.option_1).length;
+      const optionTwoCount = data.filter(v => v.vote === poll.option_2).length;
+      return { optionOneCount, optionTwoCount, total: data.length };
+    }
+
+    async function loadPolls() {
+      if (!supabaseClient) return;
+      pollsList.innerHTML = '<p class="small-note">Loading polls...</p>';
+
+      const { data: polls, error } = await supabaseClient
+        .from('polls')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        pollsList.innerHTML = `<p class="small-note">Error: ${escapeHtml(error.message)}</p>`;
+        return;
+      }
+
+      if (!polls || polls.length === 0) {
+        pollsList.innerHTML = '<p class="small-note">No polls yet. Create your first poll on the left.</p>';
+        return;
+      }
+
+      const cards = [];
+      for (const poll of polls) {
+        const counts = await getVoteCounts(poll);
+        const optionOnePct = counts.total ? Math.round((counts.optionOneCount / counts.total) * 100) : 0;
+        const optionTwoPct = counts.total ? 100 - optionOnePct : 0;
+
+        cards.push(`
+          <article class="poll">
+            <div class="poll-top">
+              <h3>${escapeHtml(poll.question)}</h3>
+              <span class="badge ${escapeHtml(poll.status)}">${escapeHtml(poll.status)}</span>
+            </div>
+            <div class="meta">Team: ${escapeHtml(poll.team)} • Votes: ${counts.total} • Created: ${new Date(poll.created_at).toLocaleString()}</div>
+            <div class="bars">
+              <div>
+                <div class="bar-label"><span>${escapeHtml(poll.option_1)}</span><span>${counts.optionOneCount} votes • ${optionOnePct}%</span></div>
+                <div class="track"><div class="fill" style="width:${optionOnePct}%"></div></div>
+              </div>
+              <div>
+                <div class="bar-label"><span>${escapeHtml(poll.option_2)}</span><span>${counts.optionTwoCount} votes • ${optionTwoPct}%</span></div>
+                <div class="track"><div class="fill red" style="width:${optionTwoPct}%"></div></div>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn green" onclick="activatePoll('${poll.id}')">Activate</button>
+              <button class="btn yellow" onclick="closePoll('${poll.id}')">Close</button>
+              <button class="btn secondary" onclick="deletePoll('${poll.id}')">Delete</button>
+            </div>
+          </article>
+        `);
+      }
+
+      pollsList.innerHTML = cards.join('');
+    }
+
+    async function createPoll(event) {
+      event.preventDefault();
+      if (!supabaseClient) {
+        showToast('Add Supabase keys first.');
+        return;
+      }
+
+      createBtn.disabled = true;
+      createBtn.textContent = 'Creating...';
+
+      const { error } = await supabaseClient.from('polls').insert({
+        question: question.value.trim(),
+        option_1: option1.value.trim(),
+        option_2: option2.value.trim(),
+        team: team.value.trim(),
+        status: statusInput.value
+      });
+
+      createBtn.disabled = false;
+      createBtn.textContent = 'Create Poll';
+
+      if (error) {
+        console.error(error);
+        showToast(`Create failed: ${error.message}`);
+        return;
+      }
+
+      pollForm.reset();
+      option1.value = 'YES';
+      option2.value = 'NO';
+      team.value = 'canadiens';
+      statusInput.value = 'draft';
+      showToast('Poll created.');
+      loadPolls();
+    }
+
+    async function activatePoll(id) {
+      if (!supabaseClient) return;
+
+      await supabaseClient.from('polls').update({ status: 'closed' }).eq('status', 'active');
+
+      const { error } = await supabaseClient.from('polls').update({ status: 'active' }).eq('id', id);
+      if (error) {
+        console.error(error);
+        showToast(`Activate failed: ${error.message}`);
+        return;
+      }
+      showToast('Poll activated. Homepage will now load this poll.');
+      loadPolls();
+    }
+
+    async function closePoll(id) {
+      if (!supabaseClient) return;
+      const { error } = await supabaseClient.from('polls').update({ status: 'closed' }).eq('id', id);
+      if (error) {
+        console.error(error);
+        showToast(`Close failed: ${error.message}`);
+        return;
+      }
+      showToast('Poll closed.');
+      loadPolls();
+    }
+
+    async function deletePoll(id) {
+      if (!supabaseClient) return;
+      const confirmed = confirm('Delete this poll and its votes?');
+      if (!confirmed) return;
+
+      const { error } = await supabaseClient.from('polls').delete().eq('id', id);
+      if (error) {
+        console.error(error);
+        showToast(`Delete failed: ${error.message}`);
+        return;
+      }
+      showToast('Poll deleted.');
+      loadPolls();
+    }
+
+    window.activatePoll = activatePoll;
+    window.closePoll = closePoll;
+    window.deletePoll = deletePoll;
+
+    pollForm.addEventListener('submit', createPoll);
+    refreshBtn.addEventListener('click', loadPolls);
+
+    testConnection().then(loadPolls);
+    setInterval(loadPolls, 8000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SportsMistakes | Fan Verdict Live</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #07111c;
+      --bg2: #0a1927;
+      --card: rgba(13, 31, 48, 0.82);
+      --card2: rgba(8, 22, 35, 0.92);
+      --red: #ff3030;
+      --red2: #c41521;
+      --green: #39df69;
+      --text: #ffffff;
+      --muted: #aeb9c5;
+      --line: rgba(255,255,255,0.11);
+      --yellow: #ffd12f;
+      --blue: #3d8cff;
+    }
+
+    body {
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      background:
+        radial-gradient(circle at 70% 20%, rgba(255, 48, 48, 0.12), transparent 28%),
+        radial-gradient(circle at 25% 40%, rgba(30, 114, 255, 0.12), transparent 32%),
+        linear-gradient(180deg, #040b13 0%, var(--bg) 42%, #03070c 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body:before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      mask-image: linear-gradient(to bottom, black, transparent 75%);
+    }
+
+    .stadium-glow {
+      position: fixed;
+      inset: auto -15% 0 -15%;
+      height: 46vh;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.11), transparent 55%);
+      opacity: 0.45;
+      pointer-events: none;
+      filter: blur(8px);
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 42px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .logo {
+      line-height: .85;
+      letter-spacing: -1px;
+      transform: rotate(-1deg);
+    }
+
+    .logo .sports {
+      font-size: 32px;
+      display: block;
+      text-shadow: 0 2px 0 rgba(0,0,0,.5);
+    }
+
+    .logo .mistakes {
+      color: var(--red);
+      font-size: 42px;
+      display: block;
+      font-style: italic;
+      margin-top: -4px;
+      text-shadow: 0 3px 0 rgba(0,0,0,.35);
+    }
+
+    .logo small {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 1.8px;
+      margin-top: 8px;
+      color: white;
+    }
+
+    nav {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      opacity: .92;
+    }
+
+    nav a:hover { color: var(--red); }
+
+    .btn {
+      border: 0;
+      border-radius: 8px;
+      color: white;
+      background: linear-gradient(180deg, #ff3333, #c91622);
+      box-shadow: 0 12px 30px rgba(255,48,48,.25), inset 0 1px rgba(255,255,255,.18);
+      padding: 16px 24px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,.28);
+      box-shadow: none;
+    }
+
+    .btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr .8fr .36fr;
+      gap: 30px;
+      padding: 62px 0 34px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      font-family: Arial, sans-serif;
+      color: var(--red);
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(44px, 6vw, 82px);
+      line-height: .9;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+      max-width: 720px;
+    }
+
+    h1 em {
+      color: var(--red);
+      display: block;
+      font-style: italic;
+      transform: rotate(-1deg);
+      text-shadow: 0 5px 0 rgba(0,0,0,.28);
+    }
+
+    .subhead {
+      font-family: Arial, sans-serif;
+      color: white;
+      font-size: 20px;
+      line-height: 1.5;
+      max-width: 600px;
+      margin: 26px 0 30px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 24px 0 34px;
+      max-width: 680px;
+    }
+
+    .mini-stat {
+      padding: 18px 14px;
+      background: rgba(255,255,255,0.035);
+      border-right: 1px solid rgba(255,255,255,.1);
+      text-align: center;
+    }
+
+    .mini-stat .icon {
+      color: var(--red);
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 24px;
+    }
+
+    .mini-stat span {
+      display: block;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      font-size: 11px;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 26px;
+    }
+
+    .join-note {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+    }
+
+    .join-note small {
+      display: block;
+      color: var(--muted);
+      margin-top: 7px;
+      font-size: 12px;
+    }
+
+    .phone-wrap {
+      perspective: 1200px;
+      justify-self: center;
+    }
+
+    .phone {
+      width: 310px;
+      min-height: 650px;
+      background: #05080d;
+      border-radius: 42px;
+      padding: 16px;
+      border: 2px solid rgba(255,255,255,.28);
+      box-shadow: 0 35px 90px rgba(0,0,0,.65), 0 0 0 7px rgba(255,255,255,.035);
+      transform: rotate(8deg);
+      position: relative;
+    }
+
+    .notch {
+      width: 92px;
+      height: 20px;
+      border-radius: 0 0 15px 15px;
+      background: #000;
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+    }
+
+    .screen {
+      border-radius: 31px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #071624, #03070c);
+      min-height: 615px;
+      padding: 34px 22px 22px;
+      border: 1px solid rgba(255,255,255,.09);
+      position: relative;
+    }
+
+    .screen-top {
+      display: flex;
+      justify-content: space-between;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 24px;
+    }
+
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--red);
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+      box-shadow: 0 0 14px var(--red);
+    }
+
+    .timer { color: var(--red); font-size: 18px; }
+
+    .phone h2 {
+      font-size: 27px;
+      line-height: 1.12;
+      margin-bottom: 20px;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .vote-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .vote-card {
+      padding: 23px 8px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .vote-card.yes { background: rgba(57, 223, 105, .16); color: var(--green); }
+    .vote-card.no { background: rgba(255, 48, 48, .16); color: var(--red); }
+    .vote-card strong { font-size: 42px; display: block; }
+    .vote-card span { color: white; font-size: 19px; }
+
+    .vote-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 8px 0 14px;
+    }
+
+    .vote-btn {
+      border: 0;
+      padding: 12px 8px;
+      border-radius: 8px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      cursor: pointer;
+      color: #06101a;
+    }
+
+    .vote-btn.yes { background: var(--green); }
+    .vote-btn.no { background: var(--red); color: white; }
+
+    .votes-total {
+      text-align: center;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      margin: 14px 0 22px;
+    }
+
+    .chart {
+      height: 160px;
+      border-left: 1px solid rgba(255,255,255,.18);
+      border-bottom: 1px solid rgba(255,255,255,.18);
+      position: relative;
+      margin-top: 24px;
+      overflow: hidden;
+    }
+
+    .chart svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .phone-bottom {
+      color: #8ea6bc;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-align: center;
+      margin-top: 18px;
+      font-size: 13px;
+      letter-spacing: .5px;
+    }
+
+    .platforms {
+      align-self: center;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+    }
+
+    .platforms .scribble {
+      color: var(--red);
+      font-family: Impact, sans-serif;
+      font-size: 20px;
+      font-style: italic;
+      transform: rotate(-5deg);
+      margin-bottom: 26px;
+    }
+
+    .platforms h3 {
+      font-family: Impact, sans-serif;
+      font-size: 22px;
+      color: var(--red);
+      margin-bottom: 18px;
+      line-height: 1;
+    }
+
+    .platform {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .platform i {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-style: normal;
+      font-size: 20px;
+      background: rgba(255,255,255,.12);
+    }
+
+    .platform:nth-child(3) i { background: #2dbd64; }
+    .platform:nth-child(4) i { background: #111; border:1px solid rgba(255,255,255,.2); }
+    .platform:nth-child(5) i { background: #5865f2; }
+    .platform:nth-child(6) i { background: #1877f2; }
+    .platform:nth-child(7) i { background: linear-gradient(45deg,#f58529,#dd2a7b,#8134af); }
+    .platform:nth-child(8) i { background: #ff4500; }
+    .platform:nth-child(9) i { background: #0b7cff; }
+
+    .platform-verdict {
+      font-size: 19px;
+      line-height: 1.2;
+      margin-top: 22px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin: 0 0 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.28);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.07), transparent 42%);
+      pointer-events: none;
+    }
+
+    .card h3 {
+      font-size: 27px;
+      margin-bottom: 18px;
+    }
+
+    .tag-live {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      border: 1px solid var(--red);
+      color: var(--red);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .teams {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin: 16px 0 18px;
+    }
+
+    .team-circle {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.08);
+      border: 2px solid rgba(255,255,255,.15);
+      font-size: 30px;
+    }
+
+    .verdict-big {
+      text-align: center;
+    }
+
+    .verdict-big small {
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .verdict-big .percent {
+      display: block;
+      color: var(--red);
+      font-size: 82px;
+      line-height: .9;
+    }
+
+    .verdict-big .blame {
+      display: block;
+      font-size: 31px;
+      margin-bottom: 10px;
+    }
+
+    .muted {
+      font-family: Arial, sans-serif;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card-button {
+      margin-top: 22px;
+      display: block;
+      text-align: center;
+      padding: 15px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: white;
+      border-radius: 7px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .gauge-wrap {
+      text-align: center;
+      padding-top: 8px;
+    }
+
+    .gauge {
+      width: 250px;
+      height: 140px;
+      margin: 0 auto 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gauge .arc {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: conic-gradient(from 270deg, #39df69 0deg, #f1e72f 70deg, #ff8a00 110deg, #ff3030 160deg, transparent 160deg, transparent 360deg);
+      position: absolute;
+      top: 15px;
+      left: 0;
+    }
+
+    .gauge .inner {
+      width: 166px;
+      height: 166px;
+      border-radius: 50%;
+      background: #07111c;
+      position: absolute;
+      top: 57px;
+      left: 42px;
+    }
+
+    .gauge .needle {
+      width: 88px;
+      height: 8px;
+      background: var(--red);
+      position: absolute;
+      left: 125px;
+      top: 118px;
+      transform-origin: left center;
+      transform: rotate(-8deg);
+      border-radius: 8px;
+    }
+
+    .gauge-number {
+      font-size: 76px;
+      line-height: .9;
+      text-shadow: 0 5px 0 rgba(0,0,0,.35);
+    }
+
+    .panic-label {
+      color: var(--red);
+      font-size: 28px;
+      margin: 8px 0;
+    }
+
+    .poll-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .poll-item {
+      background: rgba(0,0,0,.24);
+      padding: 16px;
+      border-radius: 9px;
+      display: grid;
+      gap: 8px;
+      border: 1px solid rgba(255,255,255,.05);
+    }
+
+    .poll-item p {
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      font-size: 15px;
+      line-height: 1.3;
+    }
+
+    .poll-score {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 24px;
+    }
+
+    .poll-score .yes { color: var(--green); }
+    .poll-score .no { color: var(--red); }
+
+    .monetize {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border: 1px solid var(--line);
+      background: rgba(8, 22, 35, 0.88);
+      border-radius: 10px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+
+    .money-item {
+      padding: 25px 20px;
+      text-align: center;
+      border-right: 1px solid var(--line);
+    }
+    .money-item:last-child { border-right: 0; }
+    .money-item .money-icon { color: var(--red); font-size: 42px; margin-bottom: 14px; }
+    .money-item h4 { font-size: 20px; margin-bottom: 12px; }
+    .money-item p { font-family: Arial, sans-serif; color: white; line-height: 1.45; font-size: 14px; margin-bottom: 18px; }
+    .money-item a { color: var(--red); font-family: Arial, sans-serif; font-weight: 900; text-decoration: none; font-size: 13px; text-transform: uppercase; }
+
+    .signup {
+      margin: 18px 0 28px;
+      display: grid;
+      grid-template-columns: 1.25fr .9fr;
+      gap: 24px;
+      align-items: center;
+      background: rgba(13, 31, 48, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 28px;
+    }
+
+    .signup h2 {
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    .signup p {
+      font-family: Arial, sans-serif;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 8px;
+      max-width: 560px;
+    }
+
+    input {
+      flex: 1;
+      padding: 17px 16px;
+      border-radius: 7px;
+      border: 0;
+      font-size: 15px;
+      font-family: Arial, sans-serif;
+    }
+
+    .signup small {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-family: Arial, sans-serif;
+    }
+
+    .signup-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      text-align: center;
+    }
+
+    .signup-stats div { border-left: 1px solid var(--line); padding-left: 12px; }
+    .signup-stats b { font-size: 36px; display:block; }
+    .signup-stats span { font-family: Arial, sans-serif; font-weight:900; color:white; font-size: 13px; }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0 40px;
+      font-family: Arial, sans-serif;
+      color: var(--muted);
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+
+    footer strong {
+      color: var(--red);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .sponsors {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-weight: 900;
+      letter-spacing: 1px;
+      opacity: .75;
+      font-size: 19px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%) translateY(20px);
+      background: white;
+      color: #06101a;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      padding: 14px 20px;
+      border-radius: 10px;
+      opacity: 0;
+      transition: .25s;
+      z-index: 20;
+      box-shadow: 0 18px 55px rgba(0,0,0,.45);
+      text-align: center;
+      max-width: calc(100% - 28px);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 1020px) {
+      nav { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .phone { transform: rotate(0); }
+      .platforms { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 18px; }
+      .platforms h3, .platforms .scribble, .platform-verdict { grid-column: 1 / -1; }
+      .cards, .monetize, .signup { grid-template-columns: 1fr; }
+      .monetize .money-item { border-right: 0; border-bottom: 1px solid var(--line); }
+      .monetize .money-item:last-child { border-bottom: 0; }
+    }
+
+    @media (max-width: 640px) {
+      .container { width: min(100% - 26px, 1180px); }
+      header { align-items: flex-start; gap: 14px; }
+      .btn { padding: 13px 15px; font-size: 12px; }
+      .stats-row, .signup-stats { grid-template-columns: repeat(2, 1fr); }
+      .form-row { flex-direction: column; }
+      .phone { width: 280px; min-height: 590px; }
+      .screen { min-height: 558px; }
+      h1 { font-size: 48px; }
+      .platforms { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stadium-glow"></div>
+
+  <div class="container">
+    <header>
+      <div class="logo">
+        <span class="sports">SPORTS</span>
+        <span class="mistakes">MISTAKES</span>
+        <small>FAN VERDICT. LIVE.</small>
+      </div>
+      <nav>
+        <a href="#polls">Live Polls</a>
+        <a href="#verdicts">Fan Verdicts</a>
+        <a href="#panic">Panic Meter</a>
+        <a href="#rankings">Rankings</a>
+        <a href="#merch">Merch</a>
+        <a href="#about">About</a>
+      </nav>
+      <a href="#join" class="btn">Join the Panic Line 💬</a>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Live polls • real fans • instant verdicts</div>
+        <h1>The Live Fan Verdict <em>on Every Big Moment.</em></h1>
+        <p class="subhead">Real fans. Real-time polls. No takes — just raw opinions when it matters most.</p>
+
+        <div class="stats-row">
+          <div class="mini-stat"><div class="icon">👥</div><strong>100K+</strong><span>Fans participating</span></div>
+          <div class="mini-stat"><div class="icon">📈</div><strong>Live</strong><span>Polls during every game</span></div>
+          <div class="mini-stat"><div class="icon">⚡</div><strong>Instant</strong><span>Results in seconds</span></div>
+          <div class="mini-stat"><div class="icon">🏆</div><strong>Ranked</strong><span>Fans & rewards</span></div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#join" class="btn">Join the Panic Line →</a>
+          <a href="#polls" class="btn secondary">See Live Poll ⦿</a>
+        </div>
+
+        <p class="join-note">Join by text: <strong>Text JOIN to 1-833-PANIC-01</strong><small>Message & data rates may apply. Reply STOP to unsubscribe.</small></p>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="screen-top"><span><i class="live-dot"></i>LIVE POLL</span><span class="timer" id="timer">02:18</span></div>
+            <h2 id="activeQuestion">Should the coach pull the goalie?</h2>
+            <div class="vote-grid">
+              <div class="vote-card yes"><strong id="yesVote">73%</strong><span id="optionOneLabel">YES</span></div>
+              <div class="vote-card no"><strong id="noVote">27%</strong><span id="optionTwoLabel">NO</span></div>
+            </div>
+            <div class="vote-actions">
+              <button class="vote-btn yes" id="voteOneBtn" type="button">Vote YES</button>
+              <button class="vote-btn no" id="voteTwoBtn" type="button">Vote NO</button>
+            </div>
+            <div class="votes-total">Total Votes: <span id="voteTotal">24,893</span></div>
+            <div class="chart">
+              <svg viewBox="0 0 260 160" preserveAspectRatio="none">
+                <polyline points="0,122 25,112 48,102 68,107 89,75 112,84 134,70 155,62 180,67 205,50 230,56 260,38" fill="none" stroke="#39df69" stroke-width="4" />
+                <polyline points="0,142 30,130 55,136 86,120 112,124 143,111 168,117 200,96 225,102 260,86" fill="none" stroke="#ff3030" stroke-width="4" />
+              </svg>
+            </div>
+            <div class="phone-bottom">LIVE RESULTS • REAL FANS</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="platforms">
+        <div class="scribble">↗ Join by text or online!</div>
+        <h3>One Poll.<br>Every Platform.</h3>
+        <div class="platform"><i>💬</i> Text Message</div>
+        <div class="platform"><i>𝕏</i> X / Twitter</div>
+        <div class="platform"><i>☯</i> Discord</div>
+        <div class="platform"><i>f</i> Facebook</div>
+        <div class="platform"><i>◎</i> Instagram</div>
+        <div class="platform"><i>r</i> Reddit</div>
+        <div class="platform"><i>🌐</i> Web & App</div>
+        <div class="platform-verdict">ALL RESPONSES.<br>ONE LIVE VERDICT.</div>
+      </aside>
+    </section>
+
+    <section class="cards" id="polls">
+      <div class="card" id="verdicts">
+        <h3>Live Fan Verdict</h3><span class="tag-live">● LIVE</span>
+        <div class="teams"><div class="team-circle">CH</div><strong>VS</strong><div class="team-circle">TOR</div></div>
+        <div class="verdict-big">
+          <small>FINAL FAN VERDICT</small>
+          <span class="percent" id="verdictPercent">81%</span>
+          <span class="blame" id="verdictText">BLAME COACHING</span>
+          <p class="muted" id="verdictSubtext">19% blame players</p>
+        </div>
+        <a href="#join" class="card-button">Join The Next Vote →</a>
+      </div>
+
+      <div class="card" id="panic">
+        <h3>Panic Meter</h3>
+        <div class="gauge-wrap">
+          <div class="gauge"><div class="arc"></div><div class="inner"></div><div class="needle"></div></div>
+          <div class="gauge-number">87</div>
+          <div class="panic-label">🚨 EXTREME PANIC</div>
+          <p class="muted">Fans are not happy. Montreal is melting down.</p>
+        </div>
+        <a href="#join" class="card-button">Join Panic Alerts →</a>
+      </div>
+
+      <div class="card">
+        <h3>Recent Polls</h3>
+        <div class="poll-list">
+          <div class="poll-item"><p>Should the coach challenge that call?</p><div class="poll-score"><span class="yes">92% YES</span><span class="no">8% NO</span></div></div>
+          <div class="poll-item"><p>Who’s the biggest problem right now?</p><div class="poll-score"><span class="yes">72%</span><span>COACHING</span></div></div>
+          <div class="poll-item"><p>Time to trade this player?</p><div class="poll-score"><span class="yes">64% YES</span><span class="no">36% NO</span></div></div>
+        </div>
+        <a href="#join" class="card-button">Vote In The Next Poll →</a>
+      </div>
+    </section>
+
+    <section class="monetize" id="about">
+      <div class="money-item"><div class="money-icon">$</div><h4>Sponsors & Partners</h4><p>Your brand in front of the most passionate fans in sports.</p><a href="#join">Partner with us →</a></div>
+      <div class="money-item"><div class="money-icon">♛</div><h4>Premium Membership</h4><p>Get insider polls, early access, VIP rankings & more.</p><a href="#join">Go Premium →</a></div>
+      <div class="money-item"><div class="money-icon">📈</div><h4>Live Fan Data</h4><p>Real-time fan sentiment you can track, share and trust.</p><a href="#join">Explore Data →</a></div>
+      <div class="money-item" id="merch"><div class="money-icon">🛒</div><h4>Fan Merch</h4><p>Wear your takes. Rep the chaos. Join the movement.</p><a href="#join">Shop Now →</a></div>
+      <div class="money-item" id="rankings"><div class="money-icon">🏆</div><h4>Fan Rankings</h4><p>Top voters. Big loyalty. Real fans get real recognition.</p><a href="#join">View Rankings →</a></div>
+    </section>
+
+    <section class="signup" id="join">
+      <div>
+        <h2>Join the Panic Line</h2>
+        <p>Get live polls, results and chaos straight to you.</p>
+        <form class="form-row" id="joinForm">
+          <input id="fanPhone" type="tel" placeholder="Enter your mobile number" required />
+          <button class="btn" id="joinButton" type="submit">Join Now 💬</button>
+        </form>
+        <small>Reply STOP to opt out. For this prototype, signups are saved to Supabase.</small>
+      </div>
+      <div class="signup-stats">
+        <div><b>100K+</b><span>Fans</span></div>
+        <div><b>1M+</b><span>Votes Cast</span></div>
+        <div><b>500+</b><span>Polls Run</span></div>
+        <div><b>100%</b><span>Passion</span></div>
+      </div>
+    </section>
+
+    <footer>
+      <div><strong>Powered by the fans. Fueled by passion.</strong><span>Proud partners of unforgettable moments.</span></div>
+      <div class="sponsors"><span>Molson</span><span>DoorDash</span><span>DraftKings</span><span>FanDuel</span><span>BetMGM</span></div>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">You’re on the Panic Line demo list 🔥</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
+
+    const isSupabaseConfigured =
+      SUPABASE_URL.startsWith("https://") &&
+      SUPABASE_ANON_KEY.length > 40 &&
+      !SUPABASE_URL.includes("PASTE_") &&
+      !SUPABASE_ANON_KEY.includes("PASTE_");
+
+    const supabaseClient = isSupabaseConfigured
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+    const timer = document.getElementById('timer');
+    const voteTotal = document.getElementById('voteTotal');
+    const yesVote = document.getElementById('yesVote');
+    const noVote = document.getElementById('noVote');
+    const activeQuestion = document.getElementById('activeQuestion');
+    const optionOneLabel = document.getElementById('optionOneLabel');
+    const optionTwoLabel = document.getElementById('optionTwoLabel');
+    const voteOneBtn = document.getElementById('voteOneBtn');
+    const voteTwoBtn = document.getElementById('voteTwoBtn');
+    const verdictPercent = document.getElementById('verdictPercent');
+    const verdictText = document.getElementById('verdictText');
+    const verdictSubtext = document.getElementById('verdictSubtext');
+    const joinForm = document.getElementById('joinForm');
+    const fanPhone = document.getElementById('fanPhone');
+    const joinButton = document.getElementById('joinButton');
+
+    let seconds = 138;
+    let demoTotal = 24893;
+    let demoYes = 73;
+    let activePoll = null;
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    function updateVisualPercent(optionOneCount, optionTwoCount) {
+      const total = optionOneCount + optionTwoCount;
+      const yesPercent = total === 0 ? 50 : Math.round((optionOneCount / total) * 100);
+      const noPercent = 100 - yesPercent;
+
+      yesVote.textContent = `${yesPercent}%`;
+      noVote.textContent = `${noPercent}%`;
+      voteTotal.textContent = total.toLocaleString();
+
+      verdictPercent.textContent = `${yesPercent}%`;
+      verdictText.textContent = `${yesPercent >= 50 ? optionOneLabel.textContent : optionTwoLabel.textContent} VERDICT`;
+      verdictSubtext.textContent = `${noPercent}% chose ${optionTwoLabel.textContent}`;
+    }
+
+    async function loadActivePoll() {
+      if (!supabaseClient) {
+        console.warn('Supabase is not configured yet. Demo mode is running.');
+        return;
+      }
+
+      const { data: polls, error } = await supabaseClient
+        .from('polls')
+        .select('*')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (error) {
+        console.error('Could not load active poll:', error);
+        showToast('Could not load Supabase poll yet. Check RLS/table setup.');
+        return;
+      }
+
+      if (!polls || polls.length === 0) {
+        showToast('No active poll found yet. Add one in Supabase.');
+        return;
+      }
+
+      activePoll = polls[0];
+      activeQuestion.textContent = activePoll.question;
+      optionOneLabel.textContent = activePoll.option_1 || 'YES';
+      optionTwoLabel.textContent = activePoll.option_2 || 'NO';
+      voteOneBtn.textContent = `Vote ${activePoll.option_1 || 'YES'}`;
+      voteTwoBtn.textContent = `Vote ${activePoll.option_2 || 'NO'}`;
+
+      await loadVoteCounts();
+    }
+
+    async function loadVoteCounts() {
+      if (!supabaseClient || !activePoll) return;
+
+      const { data: votes, error } = await supabaseClient
+        .from('votes')
+        .select('vote')
+        .eq('poll_id', activePoll.id);
+
+      if (error) {
+        console.error('Could not load votes:', error);
+        return;
+      }
+
+      const optionOne = activePoll.option_1 || 'YES';
+      const optionTwo = activePoll.option_2 || 'NO';
+      const optionOneCount = votes.filter(v => v.vote === optionOne).length;
+      const optionTwoCount = votes.filter(v => v.vote === optionTwo).length;
+
+      updateVisualPercent(optionOneCount, optionTwoCount);
+    }
+
+    async function submitVote(voteValue) {
+      if (!supabaseClient) {
+        showToast('Demo vote counted visually. Add Supabase keys to save real votes.');
+        demoTotal += 1;
+        if (voteValue === 'YES') demoYes = Math.min(99, demoYes + 1);
+        updateVisualPercent(Math.round(demoTotal * demoYes / 100), Math.round(demoTotal * (100 - demoYes) / 100));
+        return;
+      }
+
+      if (!activePoll) {
+        showToast('No active poll loaded yet.');
+        return;
+      }
+
+      voteOneBtn.disabled = true;
+      voteTwoBtn.disabled = true;
+
+      const { error } = await supabaseClient
+        .from('votes')
+        .insert({
+          poll_id: activePoll.id,
+          vote: voteValue,
+          source: 'homepage'
+        });
+
+      voteOneBtn.disabled = false;
+      voteTwoBtn.disabled = false;
+
+      if (error) {
+        console.error('Vote failed:', error);
+        showToast('Vote failed. Check your Supabase votes policy.');
+        return;
+      }
+
+      showToast(`Vote saved: ${voteValue}`);
+      await loadVoteCounts();
+    }
+
+    voteOneBtn.addEventListener('click', () => {
+      submitVote(activePoll ? activePoll.option_1 : 'YES');
+    });
+
+    voteTwoBtn.addEventListener('click', () => {
+      submitVote(activePoll ? activePoll.option_2 : 'NO');
+    });
+
+    joinForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const phone = fanPhone.value.trim();
+
+      if (!phone) {
+        showToast('Enter a phone number first.');
+        return;
+      }
+
+      if (!supabaseClient) {
+        showToast('Demo signup only. Add Supabase keys to save fans.');
+        joinForm.reset();
+        return;
+      }
+
+      joinButton.disabled = true;
+      joinButton.textContent = 'Saving...';
+
+      const { error } = await supabaseClient
+        .from('fans')
+        .insert({
+          phone,
+          source: 'homepage',
+          team: 'canadiens',
+          opted_in: true
+        });
+
+      joinButton.disabled = false;
+      joinButton.textContent = 'Join Now 💬';
+
+      if (error) {
+        console.error('Signup failed:', error);
+        showToast('Signup failed. Check your Supabase fans policy.');
+        return;
+      }
+
+      showToast('You’re on the Panic Line list 🔥');
+      joinForm.reset();
+    });
+
+    setInterval(() => {
+      seconds = Math.max(0, seconds - 1);
+      const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const s = String(seconds % 60).padStart(2, '0');
+      timer.textContent = `${m}:${s}`;
+
+      if (!activePoll) {
+        demoTotal += Math.floor(Math.random() * 27);
+        if (Math.random() > 0.65) demoYes += Math.random() > 0.5 ? 1 : -1;
+        demoYes = Math.max(68, Math.min(78, demoYes));
+        voteTotal.textContent = demoTotal.toLocaleString();
+        yesVote.textContent = `${demoYes}%`;
+        noVote.textContent = `${100 - demoYes}%`;
+      }
+    }, 1800);
+
+    loadActivePoll();
+    setInterval(loadVoteCounts, 5000);
+  </script>
+</body>
+</html>
