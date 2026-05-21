@@ -113,6 +113,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="container">
@@ -135,8 +136,8 @@
     const app = document.getElementById("app");
 
     let poll = null;
-    let options = [];
     let votes = [];
+    let options = [];
 
     function getVoterId() {
       let voterId = localStorage.getItem("sms_voter_id");
@@ -149,27 +150,33 @@
       return voterId;
     }
 
-    function getOptionsFromPoll(pollData) {
-      if (Array.isArray(pollData.options)) {
-        return pollData.options.filter(Boolean);
-      }
+    function getQuestionText() {
+      return poll.question || poll.title || "Untitled poll";
+    }
 
-      if (Array.isArray(pollData.poll_options)) {
-        return pollData.poll_options.filter(Boolean);
-      }
-
-      if (Array.isArray(pollData.answers)) {
-        return pollData.answers.filter(Boolean);
-      }
-
+    function getOptionsFromPoll() {
       return [
-        pollData.option_1,
-        pollData.option_2,
-        pollData.option_3,
-        pollData.option_4,
-        pollData.option_5,
-        pollData.option_6
+        poll.option_1,
+        poll.option_2,
+        poll.option_3,
+        poll.option_4,
+        poll.option_5,
+        poll.option_6
       ].filter(Boolean);
+    }
+
+    function getVoteChoice(vote) {
+      return vote.option_selected ||
+             vote.choice ||
+             vote.option ||
+             vote.option_text ||
+             vote.vote ||
+             "";
+    }
+
+    function hasAlreadyVoted() {
+      const voterId = getVoterId();
+      return votes.some(vote => vote.voter_id === voterId);
     }
 
     async function loadPoll() {
@@ -191,10 +198,10 @@
       }
 
       poll = pollData;
-      options = getOptionsFromPoll(poll);
+      options = getOptionsFromPoll();
 
       const { data: voteData, error: voteError } = await supabaseClient
-        .from("poll_votes")
+        .from("votes")
         .select("*")
         .eq("poll_id", pollId);
 
@@ -206,34 +213,6 @@
       }
 
       render();
-    }
-
-    function hasAlreadyVoted() {
-      const voterId = getVoterId();
-      return votes.some(vote => vote.voter_id === voterId);
-    }
-
-    function getQuestionText() {
-      return poll.question || poll.title || poll.name || "Untitled poll";
-    }
-
-    function getVoteOptionIndex(vote) {
-      if (typeof vote.option_index === "number") return vote.option_index;
-      if (typeof vote.choice_index === "number") return vote.choice_index;
-
-      if (vote.option_text) {
-        return options.indexOf(vote.option_text);
-      }
-
-      if (vote.option) {
-        return options.indexOf(vote.option);
-      }
-
-      if (vote.choice) {
-        return options.indexOf(vote.choice);
-      }
-
-      return -1;
     }
 
     function render() {
@@ -254,7 +233,7 @@
       if (!alreadyVoted) {
         options.forEach((option, index) => {
           html += `
-            <button class="option-btn" onclick="submitVote(${index})">
+            <button class="option-btn" onclick="submitVote('${option.replace(/'/g, "\\'")}')">
               ${option}
             </button>
           `;
@@ -273,12 +252,17 @@
     }
 
     function renderResults() {
-      const counts = options.map(() => 0);
+      const counts = {};
+
+      options.forEach(option => {
+        counts[option] = 0;
+      });
 
       votes.forEach(vote => {
-        const index = getVoteOptionIndex(vote);
-        if (index >= 0 && counts[index] !== undefined) {
-          counts[index]++;
+        const choice = getVoteChoice(vote);
+
+        if (counts[choice] !== undefined) {
+          counts[choice]++;
         }
       });
 
@@ -288,8 +272,8 @@
         <div class="results">
       `;
 
-      options.forEach((option, index) => {
-        const count = counts[index];
+      options.forEach(option => {
+        const count = counts[option] || 0;
         const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
 
         html += `
@@ -312,31 +296,19 @@
       return html;
     }
 
-    async function submitVote(optionIndex) {
+    async function submitVote(selectedOption) {
       const voterId = getVoterId();
-      const selectedOption = options[optionIndex];
 
-      let insertResult = await supabaseClient
-        .from("poll_votes")
+      const { error } = await supabaseClient
+        .from("votes")
         .insert({
           poll_id: pollId,
           voter_id: voterId,
-          option_index: optionIndex,
-          option_text: selectedOption
+          option_selected: selectedOption
         });
 
-      if (insertResult.error) {
-        insertResult = await supabaseClient
-          .from("poll_votes")
-          .insert({
-            poll_id: pollId,
-            voter_id: voterId,
-            option_index: optionIndex
-          });
-      }
-
-      if (insertResult.error) {
-        console.error(insertResult.error);
+      if (error) {
+        console.error(error);
 
         app.innerHTML += `
           <div class="message error">
