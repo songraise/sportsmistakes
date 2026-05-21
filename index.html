@@ -41,7 +41,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
+    const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
 
     const isSupabaseConfigured =
       SUPABASE_URL.startsWith("https://") &&
@@ -52,6 +52,13 @@
     const supabaseClient = isSupabaseConfigured
       ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
       : null;
+
+
+    let voterId = localStorage.getItem("sportsmistakes_voter_id");
+    if (!voterId) {
+      voterId = crypto.randomUUID();
+      localStorage.setItem("sportsmistakes_voter_id", voterId);
+    }
 
     const els = {
       activeQuestion: document.getElementById('activeQuestion'),
@@ -313,7 +320,8 @@
       const { error } = await supabaseClient.from('votes').insert({
         poll_id: activePoll.id,
         vote: voteValue,
-        source: 'homepage'
+        source: 'homepage',
+        voter_id: voterId
       });
 
       els.voteOneBtn.disabled = false;
@@ -321,7 +329,11 @@
 
       if (error) {
         console.error('Vote failed:', error);
-        showToast(`Vote failed: ${error.message}`);
+        if (error.code === '23505') {
+          showToast('You already voted in this poll.');
+        } else {
+          showToast(`Vote failed: ${error.message}`);
+        }
         return;
       }
 
