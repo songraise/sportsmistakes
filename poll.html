@@ -2,422 +2,357 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SportsMistakes | Fan Verdict Live</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SMS Community Poll</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}:root{--bg:#07111c;--card:rgba(13,31,48,.84);--red:#ff3030;--green:#39df69;--text:#fff;--muted:#aeb9c5;--line:rgba(255,255,255,.11);--yellow:#ffd12f}body{font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;background:radial-gradient(circle at 70% 20%,rgba(255,48,48,.12),transparent 28%),radial-gradient(circle at 25% 40%,rgba(30,114,255,.12),transparent 32%),linear-gradient(180deg,#040b13 0%,var(--bg) 42%,#03070c 100%);color:var(--text);min-height:100vh;overflow-x:hidden}body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;mask-image:linear-gradient(to bottom,black,transparent 75%)}.stadium-glow{position:fixed;inset:auto -15% 0 -15%;height:46vh;background:radial-gradient(ellipse at center,rgba(255,255,255,.11),transparent 55%);opacity:.45;pointer-events:none;filter:blur(8px)}.container{width:min(1180px,calc(100% - 42px));margin:0 auto;position:relative;z-index:1}header{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-bottom:1px solid rgba(255,255,255,.07)}.logo{line-height:.85;letter-spacing:-1px;transform:rotate(-1deg)}.logo .sports{font-size:32px;display:block;text-shadow:0 2px 0 rgba(0,0,0,.5)}.logo .mistakes{color:var(--red);font-size:42px;display:block;font-style:italic;margin-top:-4px;text-shadow:0 3px 0 rgba(0,0,0,.35)}.logo small{display:block;font-size:12px;letter-spacing:1.8px;margin-top:8px;color:#fff}nav{display:flex;gap:28px;align-items:center;font-family:Arial,sans-serif;font-weight:900;font-size:13px;text-transform:uppercase}nav a{color:#fff;text-decoration:none;opacity:.92}nav a:hover{color:var(--red)}.btn{border:0;border-radius:8px;color:#fff;background:linear-gradient(180deg,#ff3333,#c91622);box-shadow:0 12px 30px rgba(255,48,48,.25),inset 0 1px rgba(255,255,255,.18);padding:16px 24px;font-family:Arial,sans-serif;font-weight:900;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn.secondary{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.28);box-shadow:none}.btn:disabled{opacity:.55;cursor:not-allowed}.hero{display:grid;grid-template-columns:1.1fr .8fr .36fr;gap:30px;padding:62px 0 34px;align-items:center}.eyebrow{font-family:Arial,sans-serif;color:var(--red);font-weight:900;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}h1{font-size:clamp(44px,6vw,82px);line-height:.9;letter-spacing:-2px;text-transform:uppercase;max-width:720px}h1 em{color:var(--red);display:block;font-style:italic;transform:rotate(-1deg);text-shadow:0 5px 0 rgba(0,0,0,.28)}.subhead{font-family:Arial,sans-serif;color:#fff;font-size:20px;line-height:1.5;max-width:600px;margin:26px 0 30px}.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0 34px;max-width:680px}.mini-stat{padding:18px 14px;background:rgba(255,255,255,.035);border-right:1px solid rgba(255,255,255,.1);text-align:center}.mini-stat .icon{color:var(--red);font-size:27px;margin-bottom:8px}.mini-stat strong{display:block;font-size:24px}.mini-stat span{display:block;font-family:Arial,sans-serif;font-weight:900;font-size:11px;line-height:1.3;text-transform:uppercase}.hero-actions{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:26px}.join-note{font-family:Arial,sans-serif;font-size:18px}.join-note small{display:block;color:var(--muted);margin-top:7px;font-size:12px}.phone-wrap{perspective:1200px;justify-self:center}.phone{width:310px;min-height:650px;background:#05080d;border-radius:42px;padding:16px;border:2px solid rgba(255,255,255,.28);box-shadow:0 35px 90px rgba(0,0,0,.65),0 0 0 7px rgba(255,255,255,.035);transform:rotate(8deg);position:relative}.notch{width:92px;height:20px;border-radius:0 0 15px 15px;background:#000;position:absolute;top:15px;left:50%;transform:translateX(-50%);z-index:3}.screen{border-radius:31px;overflow:hidden;background:linear-gradient(180deg,#071624,#03070c);min-height:615px;padding:34px 22px 22px;border:1px solid rgba(255,255,255,.09);position:relative}.screen-top{display:flex;justify-content:space-between;font-family:Arial,sans-serif;font-size:13px;font-weight:900;margin-bottom:24px}.live-dot{width:10px;height:10px;background:var(--red);border-radius:50%;display:inline-block;margin-right:8px;box-shadow:0 0 14px var(--red)}.timer{color:var(--red);font-size:18px}.phone h2{font-size:27px;line-height:1.12;margin-bottom:20px;text-align:center;font-style:italic}.vote-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.vote-card{padding:23px 8px;border-radius:10px;text-align:center;border:1px solid rgba(255,255,255,.12)}.vote-card.yes{background:rgba(57,223,105,.16);color:var(--green)}.vote-card.no{background:rgba(255,48,48,.16);color:var(--red)}.vote-card strong{font-size:42px;display:block}.vote-card span{color:#fff;font-size:19px}.vote-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 14px}.vote-btn{border:0;padding:12px 8px;border-radius:8px;font-family:Arial,sans-serif;font-weight:900;cursor:pointer;color:#06101a}.vote-btn.yes{background:var(--green)}.vote-btn.no{background:var(--red);color:#fff}.vote-btn:disabled{opacity:.55;cursor:not-allowed}.votes-total{text-align:center;color:var(--muted);font-family:Arial,sans-serif;font-size:13px;margin:14px 0 18px}.real-note{text-align:center;color:var(--yellow);font-family:Arial,sans-serif;font-weight:900;font-size:12px;margin-bottom:12px;text-transform:uppercase}.chart{height:145px;border-left:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.18);position:relative;margin-top:18px;overflow:hidden}.bar-chart{position:absolute;inset:0;display:flex;align-items:end;gap:36px;justify-content:center;padding:0 28px}.bar{width:58px;min-height:3%;border-radius:8px 8px 0 0;background:var(--green);transition:height .25s ease}.bar.red{background:var(--red)}.phone-bottom{color:#8ea6bc;font-family:Arial,sans-serif;font-weight:900;text-align:center;margin-top:18px;font-size:13px;letter-spacing:.5px}.platforms{align-self:center;font-family:Arial,sans-serif;font-weight:900}.platforms .scribble{color:var(--red);font-family:Impact,sans-serif;font-size:20px;font-style:italic;transform:rotate(-5deg);margin-bottom:26px}.platforms h3{font-family:Impact,sans-serif;font-size:22px;color:var(--red);margin-bottom:18px;line-height:1}.platform{display:flex;align-items:center;gap:12px;margin:16px 0;font-size:14px;text-transform:uppercase}.platform i{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-style:normal;font-size:20px;background:rgba(255,255,255,.12)}.platform:nth-child(3) i{background:#2dbd64}.platform:nth-child(4) i{background:#111;border:1px solid rgba(255,255,255,.2)}.platform:nth-child(5) i{background:#5865f2}.platform:nth-child(6) i{background:#1877f2}.platform:nth-child(7) i{background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af)}.platform:nth-child(8) i{background:#ff4500}.platform:nth-child(9) i{background:#0b7cff}.platform-verdict{font-size:19px;line-height:1.2;margin-top:22px}.cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:0 0 18px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 18px 60px rgba(0,0,0,.28);padding:24px;position:relative;overflow:hidden}.card:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.07),transparent 42%);pointer-events:none}.card h3{font-size:27px;margin-bottom:18px;position:relative}.tag-live{position:absolute;top:24px;right:24px;border:1px solid var(--red);color:var(--red);border-radius:6px;padding:4px 8px;font-family:Arial,sans-serif;font-size:12px;font-weight:900}.teams{display:flex;align-items:center;justify-content:center;gap:20px;margin:16px 0 18px;position:relative}.team-circle{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);font-size:30px}.verdict-big{text-align:center;position:relative}.verdict-big small{font-family:Arial,sans-serif;font-weight:900;font-size:13px}.verdict-big .percent{display:block;color:var(--red);font-size:82px;line-height:.9}.verdict-big .blame{display:block;font-size:31px;margin-bottom:10px}.muted{font-family:Arial,sans-serif;color:var(--muted);line-height:1.5;position:relative}.card-button{margin-top:22px;display:block;text-align:center;padding:15px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:7px;font-family:Arial,sans-serif;font-weight:900;text-decoration:none;text-transform:uppercase;position:relative}.gauge-wrap{text-align:center;padding-top:8px;position:relative}.gauge{width:250px;height:140px;margin:0 auto 12px;position:relative;overflow:hidden}.gauge .arc{width:250px;height:250px;border-radius:50%;background:conic-gradient(from 270deg,#39df69 0deg,#f1e72f 70deg,#ff8a00 110deg,#ff3030 160deg,transparent 160deg,transparent 360deg);position:absolute;top:15px;left:0}.gauge .inner{width:166px;height:166px;border-radius:50%;background:#07111c;position:absolute;top:57px;left:42px}.gauge .needle{width:88px;height:8px;background:var(--red);position:absolute;left:125px;top:118px;transform-origin:left center;transform:rotate(-8deg);border-radius:8px}.gauge-number{font-size:76px;line-height:.9;text-shadow:0 5px 0 rgba(0,0,0,.35)}.panic-label{color:var(--red);font-size:28px;margin:8px 0}.poll-list{display:grid;gap:11px;position:relative}.poll-item{background:rgba(0,0,0,.24);padding:16px;border-radius:9px;display:grid;gap:8px;border:1px solid rgba(255,255,255,.05)}.poll-item p{font-family:Arial,sans-serif;font-weight:900;font-size:15px;line-height:1.3}.poll-score{display:flex;justify-content:space-between;align-items:center;font-size:24px}.poll-score .yes{color:var(--green)}.poll-score .no{color:var(--red)}.monetize{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);background:rgba(8,22,35,.88);border-radius:10px;margin:16px 0;overflow:hidden}.money-item{padding:25px 20px;text-align:center;border-right:1px solid var(--line)}.money-item:last-child{border-right:0}.money-item .money-icon{color:var(--red);font-size:42px;margin-bottom:14px}.money-item h4{font-size:20px;margin-bottom:12px}.money-item p{font-family:Arial,sans-serif;color:#fff;line-height:1.45;font-size:14px;margin-bottom:18px}.money-item a{color:var(--red);font-family:Arial,sans-serif;font-weight:900;text-decoration:none;font-size:13px;text-transform:uppercase}.signup{margin:18px 0 28px;display:grid;grid-template-columns:1.25fr .9fr;gap:24px;align-items:center;background:rgba(13,31,48,.9);border:1px solid var(--line);border-radius:10px;padding:28px}.signup h2{font-size:34px;margin-bottom:8px}.signup p{font-family:Arial,sans-serif;color:#fff;margin-bottom:16px;line-height:1.5}.beta-box{padding:20px;background:rgba(255,255,255,.06);border-radius:12px;text-align:center;font-family:Arial,sans-serif;margin-top:16px;max-width:560px;border:1px solid rgba(255,255,255,.08)}.beta-box strong{font-size:20px;display:block;margin-bottom:10px}.beta-box p{margin-top:10px;color:#ccc;line-height:1.5;margin-bottom:0}.signup small{display:block;margin-top:10px;color:var(--muted);font-family:Arial,sans-serif}.signup-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center}.signup-stats div{border-left:1px solid var(--line);padding-left:12px}.signup-stats b{font-size:36px;display:block}.signup-stats span{font-family:Arial,sans-serif;font-weight:900;color:#fff;font-size:13px}footer{display:flex;justify-content:space-between;align-items:center;padding:24px 0 40px;font-family:Arial,sans-serif;color:var(--muted);gap:22px;flex-wrap:wrap}footer strong{color:var(--red);text-transform:uppercase;display:block;margin-bottom:5px}.sponsors{display:flex;gap:28px;align-items:center;flex-wrap:wrap;font-weight:900;letter-spacing:1px;opacity:.75;font-size:19px}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#fff;color:#06101a;font-family:Arial,sans-serif;font-weight:900;padding:14px 20px;border-radius:10px;opacity:0;transition:.25s;z-index:20;box-shadow:0 18px 55px rgba(0,0,0,.45);text-align:center;max-width:calc(100% - 28px)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}@media(max-width:1020px){nav{display:none}.hero{grid-template-columns:1fr}.phone{transform:rotate(0)}.platforms{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 18px}.platforms h3,.platforms .scribble,.platform-verdict{grid-column:1/-1}.cards,.monetize,.signup{grid-template-columns:1fr}.monetize .money-item{border-right:0;border-bottom:1px solid var(--line)}.monetize .money-item:last-child{border-bottom:0}}@media(max-width:640px){.container{width:min(100% - 26px,1180px)}header{align-items:flex-start;gap:14px}.btn{padding:13px 15px;font-size:12px}.stats-row,.signup-stats{grid-template-columns:repeat(2,1fr)}.phone{width:280px;min-height:590px}.screen{min-height:558px}h1{font-size:48px}.platforms{grid-template-columns:1fr}}
+    body{
+      margin:0;
+      padding:0;
+      background:#0f172a;
+      color:white;
+      font-family:Arial, sans-serif;
+    }
+
+    .container{
+      max-width:700px;
+      margin:40px auto;
+      padding:20px;
+    }
+
+    .card{
+      background:#1e293b;
+      border-radius:18px;
+      padding:30px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    h1{
+      margin-top:0;
+      font-size:2rem;
+      line-height:1.2;
+    }
+
+    .option{
+      margin-bottom:15px;
+    }
+
+    .vote-btn{
+      width:100%;
+      border:none;
+      border-radius:12px;
+      padding:16px;
+      font-size:1rem;
+      font-weight:bold;
+      cursor:pointer;
+      background:#334155;
+      color:white;
+      transition:0.2s;
+    }
+
+    .vote-btn:hover{
+      background:#475569;
+    }
+
+    .results{
+      margin-top:30px;
+    }
+
+    .result-row{
+      margin-bottom:18px;
+    }
+
+    .result-label{
+      margin-bottom:6px;
+      font-weight:bold;
+    }
+
+    .bar-bg{
+      background:#334155;
+      border-radius:999px;
+      overflow:hidden;
+      height:24px;
+    }
+
+    .bar-fill{
+      background:#22c55e;
+      height:100%;
+      text-align:right;
+      padding-right:10px;
+      line-height:24px;
+      font-size:0.85rem;
+      font-weight:bold;
+      color:white;
+    }
+
+    .message{
+      margin-top:25px;
+      padding:14px;
+      border-radius:10px;
+      font-weight:bold;
+      text-align:center;
+    }
+
+    .success{
+      background:#14532d;
+    }
+
+    .error{
+      background:#7f1d1d;
+    }
+
+    .loading{
+      text-align:center;
+      padding:50px;
+      font-size:1.2rem;
+    }
+
+    .back-link{
+      display:inline-block;
+      margin-bottom:20px;
+      color:#93c5fd;
+      text-decoration:none;
+    }
+
+    .total-votes{
+      margin-top:25px;
+      opacity:0.8;
+      font-size:0.95rem;
+    }
   </style>
 </head>
 <body>
-  <div class="stadium-glow"></div>
-  <div class="container">
-    <header>
-      <div class="logo"><span class="sports">SPORTS</span><span class="mistakes">MISTAKES</span><small>FAN VERDICT. LIVE.</small></div>
-      <nav><a href="#polls">Live Polls</a><a href="#verdicts">Fan Verdicts</a><a href="#panic">Panic Meter</a><a href="#rankings">Rankings</a><a href="#merch">Merch</a><a href="#about">About</a></nav>
-      <a href="#join" class="btn">Private Beta 💬</a>
-    </header>
-    <section class="hero">
-      <div>
-        <div class="eyebrow">Live polls • real fans • instant verdicts</div>
-        <h1>The Live Fan Verdict <em>on Every Big Moment.</em></h1>
-        <p class="subhead">Real fans. Real-time polls. No takes — just raw opinions when it matters most.</p>
-        <div class="stats-row"><div class="mini-stat"><div class="icon">👥</div><strong id="fanCount">0</strong><span>Fans joined</span></div><div class="mini-stat"><div class="icon">📈</div><strong id="pollCount">0</strong><span>Polls created</span></div><div class="mini-stat"><div class="icon">⚡</div><strong id="totalVoteCount">0</strong><span>Total votes</span></div><div class="mini-stat"><div class="icon">🏆</div><strong>Live</strong><span>Fan verdicts</span></div></div>
-        <div class="hero-actions"><a href="#join" class="btn">Private Beta →</a><a href="#polls" class="btn secondary">See Live Poll ⦿</a></div>
-        <p class="join-note">Quiet prototype mode<small>Phone collection and alerts are disabled while this is tested privately.</small></p>
-      </div>
-      <div class="phone-wrap"><div class="phone"><div class="notch"></div><div class="screen"><div class="screen-top"><span><i class="live-dot"></i>LIVE POLL</span><span class="timer" id="timer">REAL</span></div><h2 id="activeQuestion">Loading active poll...</h2><div class="vote-grid"><div class="vote-card yes"><strong id="yesVote">0%</strong><span id="optionOneLabel">YES</span></div><div class="vote-card no"><strong id="noVote">0%</strong><span id="optionTwoLabel">NO</span></div></div><div class="vote-actions"><button class="vote-btn yes" id="voteOneBtn" type="button">Vote YES</button><button class="vote-btn no" id="voteTwoBtn" type="button">Vote NO</button></div><div class="votes-total">Total Votes: <span id="voteTotal">0</span></div><div class="real-note" id="realNote">Connected to Supabase</div><div class="chart"><div class="bar-chart"><div class="bar" id="barOne" style="height:3%"></div><div class="bar red" id="barTwo" style="height:3%"></div></div></div><div class="phone-bottom">LIVE RESULTS • REAL DATA</div></div></div></div>
-      <aside class="platforms"><div class="scribble">↗ Join by text or online!</div><h3>One Poll.<br>Every Platform.</h3><div class="platform"><i>💬</i> Text Message</div><div class="platform"><i>𝕏</i> X / Twitter</div><div class="platform"><i>☯</i> Discord</div><div class="platform"><i>f</i> Facebook</div><div class="platform"><i>◎</i> Instagram</div><div class="platform"><i>r</i> Reddit</div><div class="platform"><i>🌐</i> Web & App</div><div class="platform-verdict">ALL RESPONSES.<br>ONE LIVE VERDICT.</div></aside>
-    </section>
-    <section class="cards" id="polls">
-      <div class="card" id="verdicts"><h3>Live Fan Verdict</h3><span class="tag-live">● LIVE</span><div class="teams"><div class="team-circle">CH</div><strong>VS</strong><div class="team-circle">TOR</div></div><div class="verdict-big"><small>FINAL FAN VERDICT</small><span class="percent" id="verdictPercent">0%</span><span class="blame" id="verdictText">WAITING FOR VOTES</span><p class="muted" id="verdictSubtext">Create or activate a poll in admin.</p></div><a href="#polls" class="card-button">Vote In The Live Poll →</a></div>
-      <div class="card" id="panic"><h3>Panic Meter</h3><div class="gauge-wrap"><div class="gauge"><div class="arc"></div><div class="inner"></div><div class="needle"></div></div><div class="gauge-number" id="panicScore">0</div><div class="panic-label" id="panicLabel">WAITING FOR CHAOS</div><p class="muted" id="panicCopy">The panic meter rises as votes come in.</p></div><a href="#join" class="card-button">Private Beta Mode →</a></div>
-      <div class="card"><h3>Recent Polls</h3><div class="poll-list" id="recentPolls"><div class="poll-item"><p>Loading polls...</p><div class="poll-score"><span class="yes">—</span><span class="no">—</span></div></div></div><a href="#join" class="card-button">Private Testing →</a></div>
-    </section>
-    <section class="monetize" id="about"><div class="money-item"><div class="money-icon">$</div><h4>Sponsors & Partners</h4><p>Your brand in front of the most passionate fans in sports.</p><a href="#join">Coming soon →</a></div><div class="money-item"><div class="money-icon">♛</div><h4>Premium Membership</h4><p>Get insider polls, early access, VIP rankings & more.</p><a href="#join">Coming soon →</a></div><div class="money-item"><div class="money-icon">📈</div><h4>Live Fan Data</h4><p>Real-time fan sentiment you can track, share and trust.</p><a href="#join">Coming soon →</a></div><div class="money-item" id="merch"><div class="money-icon">🛒</div><h4>Fan Merch</h4><p>Wear your takes. Rep the chaos. Join the movement.</p><a href="#join">Coming soon →</a></div><div class="money-item" id="rankings"><div class="money-icon">🏆</div><h4>Fan Rankings</h4><p>Top voters. Big loyalty. Real fans get real recognition.</p><a href="#join">Coming soon →</a></div></section>
-    <section class="signup" id="join"><div><h2>Private Beta Testing</h2><p>SportsMistakes is currently in closed testing mode while live polling, notifications and fan engagement systems are tested.</p><div class="beta-box"><strong>Closed Prototype</strong><p>Phone number collection and notifications are temporarily disabled while the platform undergoes private testing.</p></div><small>This prototype is currently being tested privately.</small></div><div class="signup-stats"><div><b id="fanCountBottom">0</b><span>Fans</span></div><div><b id="voteCountBottom">0</b><span>Votes Cast</span></div><div><b id="pollCountBottom">0</b><span>Polls Run</span></div><div><b>100%</b><span>Passion</span></div></div></section>
-    <footer><div><strong>Powered by the fans. Fueled by passion.</strong><span>Private prototype for live fan verdict testing.</span></div><div class="sponsors"><span>Molson</span><span>DoorDash</span><span>DraftKings</span><span>FanDuel</span><span>BetMGM</span></div></footer>
+
+<div class="container">
+
+  <a class="back-link" href="index.html">
+    ← Back to Polls
+  </a>
+
+  <div class="card">
+
+    <div id="loading" class="loading">
+      Loading poll...
+    </div>
+
+    <div id="poll-content" style="display:none;">
+      <h1 id="poll-title"></h1>
+
+      <div id="vote-section"></div>
+
+      <div id="message"></div>
+
+      <div class="results" id="results"></div>
+
+      <div class="total-votes" id="total-votes"></div>
+    </div>
+
   </div>
-  <div class="toast" id="toast">Saved</div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
+</div>
 
-    const isSupabaseConfigured =
-      SUPABASE_URL.startsWith("https://") &&
-      SUPABASE_ANON_KEY.length > 40 &&
-      !SUPABASE_URL.includes("PASTE_") &&
-      !SUPABASE_ANON_KEY.includes("PASTE_");
+<script>
+  const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
 
-    const supabaseClient = isSupabaseConfigured
-      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-      : null;
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
+  const params = new URLSearchParams(window.location.search);
+  const pollId = params.get('id');
 
-    let voterId = localStorage.getItem("sportsmistakes_voter_id");
+  const loadingEl = document.getElementById('loading');
+  const pollContentEl = document.getElementById('poll-content');
+  const pollTitleEl = document.getElementById('poll-title');
+  const voteSectionEl = document.getElementById('vote-section');
+  const resultsEl = document.getElementById('results');
+  const messageEl = document.getElementById('message');
+  const totalVotesEl = document.getElementById('total-votes');
+
+  let pollData = null;
+
+  function getVoterId() {
+    let voterId = localStorage.getItem('sms_voter_id');
+
     if (!voterId) {
       voterId = crypto.randomUUID();
-      localStorage.setItem("sportsmistakes_voter_id", voterId);
+      localStorage.setItem('sms_voter_id', voterId);
     }
 
-    const els = {
-      activeQuestion: document.getElementById('activeQuestion'),
-      optionOneLabel: document.getElementById('optionOneLabel'),
-      optionTwoLabel: document.getElementById('optionTwoLabel'),
-      voteOneBtn: document.getElementById('voteOneBtn'),
-      voteTwoBtn: document.getElementById('voteTwoBtn'),
-      yesVote: document.getElementById('yesVote'),
-      noVote: document.getElementById('noVote'),
-      voteTotal: document.getElementById('voteTotal'),
-      verdictPercent: document.getElementById('verdictPercent'),
-      verdictText: document.getElementById('verdictText'),
-      verdictSubtext: document.getElementById('verdictSubtext'),
-      barOne: document.getElementById('barOne'),
-      barTwo: document.getElementById('barTwo'),
-      panicScore: document.getElementById('panicScore'),
-      panicLabel: document.getElementById('panicLabel'),
-      panicCopy: document.getElementById('panicCopy'),
-      recentPolls: document.getElementById('recentPolls'),
-      fanCount: document.getElementById('fanCount'),
-      pollCount: document.getElementById('pollCount'),
-      totalVoteCount: document.getElementById('totalVoteCount'),
-      fanCountBottom: document.getElementById('fanCountBottom'),
-      voteCountBottom: document.getElementById('voteCountBottom'),
-      pollCountBottom: document.getElementById('pollCountBottom'),
-      realNote: document.getElementById('realNote'),
-      timer: document.getElementById('timer'),
-      livePollButton: document.querySelector('#verdicts .card-button')
-    };
+    return voterId;
+  }
 
-    let activePoll = null;
-    let lastActivePollId = null;
-    let isClosingExpiredPoll = false;
+  async function loadPoll() {
 
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2800);
+    if (!pollId) {
+      loadingEl.innerHTML = "Poll not found.";
+      return;
     }
 
-    function escapeHtml(value) {
-      return String(value || '')
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
+    const { data, error } = await supabaseClient
+      .from('polls')
+      .select('*')
+      .eq('id', pollId)
+      .single();
+
+    if (error || !data) {
+      console.error(error);
+
+      loadingEl.innerHTML = "Could not load poll.";
+      return;
     }
 
-    function formatNumber(number) {
-      return Number(number || 0).toLocaleString();
-    }
+    pollData = data;
 
-    function pollUrl(id) {
-      const base = location.pathname.replace(/[^\/]*$/, '');
-      return `${location.origin}${base}poll.html?id=${id}`;
-    }
+    loadingEl.style.display = 'none';
+    pollContentEl.style.display = 'block';
 
-    function secondsLeft(poll) {
-      if (!poll || !poll.ends_at) return null;
-      return Math.floor((new Date(poll.ends_at).getTime() - Date.now()) / 1000);
-    }
+    renderPoll();
+  }
 
-    function formatTime(seconds) {
-      seconds = Math.max(0, Number(seconds || 0));
-      const minutes = Math.floor(seconds / 60);
-      const remainder = String(seconds % 60).padStart(2, '0');
-      return `${minutes}:${remainder}`;
-    }
+  function renderPoll() {
 
-    function setNoPollState(message = 'No active poll found. Activate one in admin page.') {
-      activePoll = null;
-      lastActivePollId = null;
-      els.activeQuestion.textContent = message;
-      els.optionOneLabel.textContent = 'YES';
-      els.optionTwoLabel.textContent = 'NO';
-      els.voteOneBtn.textContent = 'Vote YES';
-      els.voteTwoBtn.textContent = 'Vote NO';
-      els.voteOneBtn.disabled = true;
-      els.voteTwoBtn.disabled = true;
-      els.timer.textContent = 'WAIT';
-      els.realNote.textContent = 'Waiting for active poll';
-      if (els.livePollButton) els.livePollButton.href = '#polls';
-      updateVisuals({ optionOne: 'YES', optionTwo: 'NO', optionOneCount: 0, optionTwoCount: 0, total: 0 });
-    }
+    pollTitleEl.textContent = pollData.question;
 
-    function updateVisuals({ optionOne, optionTwo, optionOneCount, optionTwoCount, total }) {
-      const onePct = total === 0 ? 0 : Math.round((optionOneCount / total) * 100);
-      const twoPct = total === 0 ? 0 : 100 - onePct;
-      const winningOption = onePct >= twoPct ? optionOne : optionTwo;
-      const winningPct = Math.max(onePct, twoPct);
-      const panic = total === 0 ? 0 : Math.min(99, Math.max(10, Math.round(winningPct * 0.9 + Math.min(total, 100) * 0.1)));
+    const options = pollData.options || [];
+    const votes = pollData.votes || [];
 
-      els.yesVote.textContent = `${onePct}%`;
-      els.noVote.textContent = `${twoPct}%`;
-      els.voteTotal.textContent = formatNumber(total);
-      els.verdictPercent.textContent = `${winningPct}%`;
-      els.verdictText.textContent = total === 0 ? 'WAITING FOR VOTES' : `${winningOption} VERDICT`;
-      els.verdictSubtext.textContent = total === 0
-        ? 'No votes yet. Be the first fan verdict.'
-        : `${formatNumber(total)} total votes • ${onePct}% ${optionOne} / ${twoPct}% ${optionTwo}`;
+    const voterId = getVoterId();
 
-      els.barOne.style.height = `${Math.max(3, onePct)}%`;
-      els.barTwo.style.height = `${Math.max(3, twoPct)}%`;
-      els.panicScore.textContent = panic;
-      els.panicLabel.textContent = panic >= 80 ? '🚨 EXTREME PANIC' : panic >= 55 ? '🔥 HIGH PANIC' : panic > 0 ? '⚠️ BUILDING PANIC' : 'WAITING FOR CHAOS';
-      els.panicCopy.textContent = total === 0
-        ? 'The panic meter rises as real votes come in.'
-        : `${winningOption} is leading the fan verdict right now.`;
-    }
+    const alreadyVoted = votes.some(v => v.voter_id === voterId);
 
-    function renderActivePoll(poll) {
-      activePoll = poll;
-      lastActivePollId = poll.id;
-      els.activeQuestion.textContent = poll.question;
-      els.optionOneLabel.textContent = poll.option_1 || 'YES';
-      els.optionTwoLabel.textContent = poll.option_2 || 'NO';
-      els.voteOneBtn.textContent = `Vote ${poll.option_1 || 'YES'}`;
-      els.voteTwoBtn.textContent = `Vote ${poll.option_2 || 'NO'}`;
-      els.voteOneBtn.disabled = false;
-      els.voteTwoBtn.disabled = false;
-      els.realNote.textContent = 'Live Supabase poll';
-      if (els.livePollButton) els.livePollButton.href = pollUrl(poll.id);
-      updateCountdown();
-    }
+    voteSectionEl.innerHTML = '';
 
-    async function closeExpiredPollIfNeeded() {
-      if (!supabaseClient || !activePoll || isClosingExpiredPoll) return;
-      const remaining = secondsLeft(activePoll);
-      if (remaining === null || remaining > 0) return;
+    if (!alreadyVoted) {
 
-      isClosingExpiredPoll = true;
-      els.voteOneBtn.disabled = true;
-      els.voteTwoBtn.disabled = true;
-      els.timer.textContent = '0:00';
-      els.realNote.textContent = 'Poll closed';
+      options.forEach((option, index) => {
 
-      const { error } = await supabaseClient
-        .from('polls')
-        .update({ status: 'closed' })
-        .eq('id', activePoll.id);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'option';
 
-      if (error) console.error('Could not close expired poll:', error);
-      isClosingExpiredPoll = false;
-      await loadActivePoll(true);
-      await loadRecentPolls();
-    }
+        wrapper.innerHTML = `
+          <button class="vote-btn" onclick="submitVote(${index})">
+            ${option}
+          </button>
+        `;
 
-    function updateCountdown() {
-      if (!activePoll) {
-        els.timer.textContent = 'WAIT';
-        return;
-      }
-      const remaining = secondsLeft(activePoll);
-      if (remaining === null) {
-        els.timer.textContent = 'LIVE';
-        els.realNote.textContent = 'No countdown set';
-        return;
-      }
-      if (remaining <= 0) {
-        els.timer.textContent = '0:00';
-        els.realNote.textContent = 'Poll closing...';
-        closeExpiredPollIfNeeded();
-        return;
-      }
-      els.timer.textContent = formatTime(remaining);
-      els.realNote.textContent = `Poll closes in ${formatTime(remaining)}`;
-    }
-
-    async function loadActivePoll(silent = false) {
-      if (!supabaseClient) {
-        setNoPollState('Supabase not configured. Add your URL and anon key.');
-        els.realNote.textContent = 'Supabase keys missing';
-        return;
-      }
-
-      const { data: polls, error } = await supabaseClient
-        .from('polls')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false })
-        .limit(1);
-
-      if (error) {
-        console.error('Could not load active poll:', error);
-        setNoPollState('Could not load active poll. Check Supabase.');
-        els.realNote.textContent = error.message || 'Poll load error';
-        return;
-      }
-
-      if (!polls || polls.length === 0) {
-        setNoPollState();
-        if (!silent) els.realNote.textContent = 'No active poll';
-        return;
-      }
-
-      const incoming = polls[0];
-      const remaining = secondsLeft(incoming);
-      if (remaining !== null && remaining <= 0) {
-        activePoll = incoming;
-        await closeExpiredPollIfNeeded();
-        return;
-      }
-
-      if (!activePoll || activePoll.id !== incoming.id) {
-        renderActivePoll(incoming);
-        if (!silent) showToast('New live poll loaded.');
-      } else {
-        activePoll = incoming;
-        updateCountdown();
-      }
-
-      await loadVoteCounts();
-    }
-
-    async function loadVoteCounts() {
-      if (!supabaseClient || !activePoll) return;
-
-      const { data: votes, error } = await supabaseClient
-        .from('votes')
-        .select('vote')
-        .eq('poll_id', activePoll.id);
-
-      if (error) {
-        console.error('Could not load votes:', error);
-        els.realNote.textContent = error.message || 'Vote load error';
-        return;
-      }
-
-      const optionOne = activePoll.option_1 || 'YES';
-      const optionTwo = activePoll.option_2 || 'NO';
-      const optionOneCount = votes.filter(v => v.vote === optionOne).length;
-      const optionTwoCount = votes.filter(v => v.vote === optionTwo).length;
-
-      updateVisuals({ optionOne, optionTwo, optionOneCount, optionTwoCount, total: votes.length });
-    }
-
-    async function submitVote(voteValue) {
-      if (!supabaseClient) {
-        showToast('Add Supabase keys first.');
-        return;
-      }
-      if (!activePoll) {
-        showToast('No active poll loaded.');
-        return;
-      }
-
-      const remaining = secondsLeft(activePoll);
-      if (remaining !== null && remaining <= 0) {
-        showToast('This poll is closed.');
-        await closeExpiredPollIfNeeded();
-        return;
-      }
-
-      els.voteOneBtn.disabled = true;
-      els.voteTwoBtn.disabled = true;
-
-      const { error } = await supabaseClient.from('votes').insert({
-        poll_id: activePoll.id,
-        vote: voteValue,
-        source: 'homepage',
-        voter_id: voterId
+        voteSectionEl.appendChild(wrapper);
       });
 
-      els.voteOneBtn.disabled = false;
-      els.voteTwoBtn.disabled = false;
+    } else {
 
-      if (error) {
-        console.error('Vote failed:', error);
-        if (error.code === '23505') {
-          showToast('You already voted in this poll.');
-        } else {
-          showToast(`Vote failed: ${error.message}`);
-        }
-        return;
-      }
-
-      showToast(`Vote saved: ${voteValue}`);
-      await Promise.all([loadVoteCounts(), loadSiteStats(), loadRecentPolls()]);
+      voteSectionEl.innerHTML = `
+        <div class="message success">
+          You already voted in this poll.
+        </div>
+      `;
     }
 
-    async function loadSiteStats() {
-      if (!supabaseClient) return;
-      const [fansResult, pollsResult, votesResult] = await Promise.all([
-        supabaseClient.from('fans').select('id', { count: 'exact', head: true }),
-        supabaseClient.from('polls').select('id', { count: 'exact', head: true }),
-        supabaseClient.from('votes').select('id', { count: 'exact', head: true })
-      ]);
+    renderResults();
+  }
 
-      const fans = fansResult.count || 0;
-      const polls = pollsResult.count || 0;
-      const votes = votesResult.count || 0;
+  function renderResults() {
 
-      els.fanCount.textContent = formatNumber(fans);
-      els.pollCount.textContent = formatNumber(polls);
-      els.totalVoteCount.textContent = formatNumber(votes);
-      els.fanCountBottom.textContent = formatNumber(fans);
-      els.pollCountBottom.textContent = formatNumber(polls);
-      els.voteCountBottom.textContent = formatNumber(votes);
+    const options = pollData.options || [];
+    const votes = pollData.votes || [];
+
+    const counts = {};
+
+    options.forEach(option => {
+      counts[option] = 0;
+    });
+
+    votes.forEach(vote => {
+      if (counts[vote.option] !== undefined) {
+        counts[vote.option]++;
+      }
+    });
+
+    const totalVotes = votes.length;
+
+    resultsEl.innerHTML = '';
+
+    options.forEach(option => {
+
+      const count = counts[option] || 0;
+
+      const percent = totalVotes > 0
+        ? Math.round((count / totalVotes) * 100)
+        : 0;
+
+      const row = document.createElement('div');
+      row.className = 'result-row';
+
+      row.innerHTML = `
+        <div class="result-label">
+          ${option} (${count})
+        </div>
+
+        <div class="bar-bg">
+          <div
+            class="bar-fill"
+            style="width:${percent}%"
+          >
+            ${percent}%
+          </div>
+        </div>
+      `;
+
+      resultsEl.appendChild(row);
+    });
+
+    totalVotesEl.textContent =
+      `Total votes: ${totalVotes}`;
+  }
+
+  async function submitVote(optionIndex) {
+
+    const voterId = getVoterId();
+
+    const selectedOption = pollData.options[optionIndex];
+
+    const updatedVotes = [
+      ...(pollData.votes || []),
+      {
+        voter_id: voterId,
+        option: selectedOption
+      }
+    ];
+
+    const { error } = await supabaseClient
+      .from('polls')
+      .update({
+        votes: updatedVotes
+      })
+      .eq('id', pollId);
+
+    if (error) {
+
+      console.error(error);
+
+      messageEl.className = 'message error';
+
+      messageEl.innerHTML =
+        'Vote failed. You may already have voted.';
+
+      return;
     }
 
-    async function loadRecentPolls() {
-      if (!supabaseClient) return;
-      const { data: polls, error } = await supabaseClient
-        .from('polls')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(3);
+    pollData.votes = updatedVotes;
 
-      if (error) {
-        els.recentPolls.innerHTML = `<div class="poll-item"><p>${escapeHtml(error.message)}</p></div>`;
-        return;
-      }
+    messageEl.className = 'message success';
 
-      if (!polls || polls.length === 0) {
-        els.recentPolls.innerHTML = '<div class="poll-item"><p>No polls yet. Create one in admin.</p></div>';
-        return;
-      }
+    messageEl.innerHTML =
+      'Vote submitted successfully!';
 
-      const items = [];
-      for (const poll of polls) {
-        const { data: votes } = await supabaseClient
-          .from('votes')
-          .select('vote')
-          .eq('poll_id', poll.id);
+    renderPoll();
+  }
 
-        const total = votes ? votes.length : 0;
-        const oneCount = votes ? votes.filter(v => v.vote === poll.option_1).length : 0;
-        const onePct = total === 0 ? 0 : Math.round((oneCount / total) * 100);
-        const twoPct = total === 0 ? 0 : 100 - onePct;
-        const status = poll.status === 'active' ? 'LIVE' : String(poll.status || '').toUpperCase();
-        const url = pollUrl(poll.id);
+  loadPoll();
+</script>
 
-        items.push(`
-          <a class="poll-item" href="${url}" style="text-decoration:none;color:white">
-            <p>${escapeHtml(poll.question)}</p>
-            <div class="poll-score"><span class="yes">${onePct}% ${escapeHtml(poll.option_1)}</span><span class="no">${twoPct}% ${escapeHtml(poll.option_2)}</span></div>
-            <div class="muted" style="font-size:12px">${escapeHtml(status)} • ${formatNumber(total)} votes</div>
-          </a>
-        `);
-      }
-      els.recentPolls.innerHTML = items.join('');
-    }
-
-    els.voteOneBtn.addEventListener('click', () => submitVote(activePoll ? activePoll.option_1 : 'YES'));
-    els.voteTwoBtn.addEventListener('click', () => submitVote(activePoll ? activePoll.option_2 : 'NO'));
-
-    async function boot() {
-      await loadActivePoll(true);
-      await Promise.all([loadSiteStats(), loadRecentPolls()]);
-    }
-
-    boot();
-    setInterval(updateCountdown, 1000);
-    setInterval(() => loadActivePoll(true), 5000);
-    setInterval(loadVoteCounts, 3000);
-    setInterval(loadSiteStats, 8000);
-    setInterval(loadRecentPolls, 10000);
-  </script>
 </body>
 </html>
