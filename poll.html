@@ -8,351 +8,350 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    body{
-      margin:0;
-      padding:0;
-      background:#0f172a;
-      color:white;
-      font-family:Arial, sans-serif;
+    body {
+      margin: 0;
+      background: #0f172a;
+      color: white;
+      font-family: Arial, sans-serif;
     }
 
-    .container{
-      max-width:700px;
-      margin:40px auto;
-      padding:20px;
+    .container {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 20px;
     }
 
-    .card{
-      background:#1e293b;
-      border-radius:18px;
-      padding:30px;
-      box-shadow:0 10px 30px rgba(0,0,0,0.3);
+    .back-link {
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 20px;
     }
 
-    h1{
-      margin-top:0;
-      font-size:2rem;
-      line-height:1.2;
+    .card {
+      background: #1e293b;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
-    .option{
-      margin-bottom:15px;
+    h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-top: 0;
+      margin-bottom: 25px;
     }
 
-    .vote-btn{
-      width:100%;
-      border:none;
-      border-radius:12px;
-      padding:16px;
-      font-size:1rem;
-      font-weight:bold;
-      cursor:pointer;
-      background:#334155;
-      color:white;
-      transition:0.2s;
+    .option-btn {
+      width: 100%;
+      background: #334155;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 10px 0;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: left;
     }
 
-    .vote-btn:hover{
-      background:#475569;
+    .option-btn:hover {
+      background: #475569;
     }
 
-    .results{
-      margin-top:30px;
+    .message {
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: bold;
     }
 
-    .result-row{
-      margin-bottom:18px;
+    .success {
+      background: #14532d;
     }
 
-    .result-label{
-      margin-bottom:6px;
-      font-weight:bold;
+    .error {
+      background: #7f1d1d;
     }
 
-    .bar-bg{
-      background:#334155;
-      border-radius:999px;
-      overflow:hidden;
-      height:24px;
+    .results {
+      margin-top: 25px;
     }
 
-    .bar-fill{
-      background:#22c55e;
-      height:100%;
-      text-align:right;
-      padding-right:10px;
-      line-height:24px;
-      font-size:0.85rem;
-      font-weight:bold;
-      color:white;
+    .result-row {
+      margin-bottom: 18px;
     }
 
-    .message{
-      margin-top:25px;
-      padding:14px;
-      border-radius:10px;
-      font-weight:bold;
-      text-align:center;
+    .result-label {
+      margin-bottom: 6px;
+      font-weight: bold;
     }
 
-    .success{
-      background:#14532d;
+    .bar-bg {
+      background: #334155;
+      border-radius: 999px;
+      overflow: hidden;
+      height: 24px;
     }
 
-    .error{
-      background:#7f1d1d;
+    .bar-fill {
+      background: #22c55e;
+      height: 100%;
+      line-height: 24px;
+      text-align: right;
+      padding-right: 8px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      min-width: 0;
     }
 
-    .loading{
-      text-align:center;
-      padding:50px;
-      font-size:1.2rem;
-    }
-
-    .back-link{
-      display:inline-block;
-      margin-bottom:20px;
-      color:#93c5fd;
-      text-decoration:none;
-    }
-
-    .total-votes{
-      margin-top:25px;
-      opacity:0.8;
-      font-size:0.95rem;
+    .muted {
+      color: #cbd5e1;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
+  <div class="container">
+    <a class="back-link" href="index.html">← Back to Polls</a>
 
-  <a class="back-link" href="index.html">
-    ← Back to Polls
-  </a>
-
-  <div class="card">
-
-    <div id="loading" class="loading">
-      Loading poll...
+    <div class="card">
+      <div id="app">Loading poll...</div>
     </div>
-
-    <div id="poll-content" style="display:none;">
-      <h1 id="poll-title"></h1>
-
-      <div id="vote-section"></div>
-
-      <div id="message"></div>
-
-      <div class="results" id="results"></div>
-
-      <div class="total-votes" id="total-votes"></div>
-    </div>
-
   </div>
-</div>
 
-<script>
-  const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
+  <script>
+    const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
 
-  const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const params = new URLSearchParams(window.location.search);
-  const pollId = params.get('id');
+    const params = new URLSearchParams(window.location.search);
+    const pollId = params.get("id");
 
-  const loadingEl = document.getElementById('loading');
-  const pollContentEl = document.getElementById('poll-content');
-  const pollTitleEl = document.getElementById('poll-title');
-  const voteSectionEl = document.getElementById('vote-section');
-  const resultsEl = document.getElementById('results');
-  const messageEl = document.getElementById('message');
-  const totalVotesEl = document.getElementById('total-votes');
+    const app = document.getElementById("app");
 
-  let pollData = null;
+    let poll = null;
+    let options = [];
+    let votes = [];
 
-  function getVoterId() {
-    let voterId = localStorage.getItem('sms_voter_id');
+    function getVoterId() {
+      let voterId = localStorage.getItem("sms_voter_id");
 
-    if (!voterId) {
-      voterId = crypto.randomUUID();
-      localStorage.setItem('sms_voter_id', voterId);
+      if (!voterId) {
+        voterId = crypto.randomUUID();
+        localStorage.setItem("sms_voter_id", voterId);
+      }
+
+      return voterId;
     }
 
-    return voterId;
-  }
+    function getOptionsFromPoll(pollData) {
+      if (Array.isArray(pollData.options)) {
+        return pollData.options.filter(Boolean);
+      }
 
-  async function loadPoll() {
+      if (Array.isArray(pollData.poll_options)) {
+        return pollData.poll_options.filter(Boolean);
+      }
 
-    if (!pollId) {
-      loadingEl.innerHTML = "Poll not found.";
-      return;
+      if (Array.isArray(pollData.answers)) {
+        return pollData.answers.filter(Boolean);
+      }
+
+      return [
+        pollData.option_1,
+        pollData.option_2,
+        pollData.option_3,
+        pollData.option_4,
+        pollData.option_5,
+        pollData.option_6
+      ].filter(Boolean);
     }
 
-    const { data, error } = await supabaseClient
-      .from('polls')
-      .select('*')
-      .eq('id', pollId)
-      .single();
+    async function loadPoll() {
+      if (!pollId) {
+        app.innerHTML = "Poll not found.";
+        return;
+      }
 
-    if (error || !data) {
-      console.error(error);
+      const { data: pollData, error: pollError } = await supabaseClient
+        .from("polls")
+        .select("*")
+        .eq("id", pollId)
+        .single();
 
-      loadingEl.innerHTML = "Could not load poll.";
-      return;
+      if (pollError || !pollData) {
+        console.error(pollError);
+        app.innerHTML = "Poll not found.";
+        return;
+      }
+
+      poll = pollData;
+      options = getOptionsFromPoll(poll);
+
+      const { data: voteData, error: voteError } = await supabaseClient
+        .from("poll_votes")
+        .select("*")
+        .eq("poll_id", pollId);
+
+      if (voteError) {
+        console.error(voteError);
+        votes = [];
+      } else {
+        votes = voteData || [];
+      }
+
+      render();
     }
 
-    pollData = data;
+    function hasAlreadyVoted() {
+      const voterId = getVoterId();
+      return votes.some(vote => vote.voter_id === voterId);
+    }
 
-    loadingEl.style.display = 'none';
-    pollContentEl.style.display = 'block';
+    function getQuestionText() {
+      return poll.question || poll.title || poll.name || "Untitled poll";
+    }
 
-    renderPoll();
-  }
+    function getVoteOptionIndex(vote) {
+      if (typeof vote.option_index === "number") return vote.option_index;
+      if (typeof vote.choice_index === "number") return vote.choice_index;
 
-  function renderPoll() {
+      if (vote.option_text) {
+        return options.indexOf(vote.option_text);
+      }
 
-    pollTitleEl.textContent = pollData.question;
+      if (vote.option) {
+        return options.indexOf(vote.option);
+      }
 
-    const options = pollData.options || [];
-    const votes = pollData.votes || [];
+      if (vote.choice) {
+        return options.indexOf(vote.choice);
+      }
 
-    const voterId = getVoterId();
+      return -1;
+    }
 
-    const alreadyVoted = votes.some(v => v.voter_id === voterId);
-
-    voteSectionEl.innerHTML = '';
-
-    if (!alreadyVoted) {
-
-      options.forEach((option, index) => {
-
-        const wrapper = document.createElement('div');
-        wrapper.className = 'option';
-
-        wrapper.innerHTML = `
-          <button class="vote-btn" onclick="submitVote(${index})">
-            ${option}
-          </button>
+    function render() {
+      if (!options.length) {
+        app.innerHTML = `
+          <h1>${getQuestionText()}</h1>
+          <p class="muted">No voting options were found for this poll.</p>
         `;
+        return;
+      }
 
-        voteSectionEl.appendChild(wrapper);
+      const alreadyVoted = hasAlreadyVoted();
+
+      let html = `
+        <h1>${getQuestionText()}</h1>
+      `;
+
+      if (!alreadyVoted) {
+        options.forEach((option, index) => {
+          html += `
+            <button class="option-btn" onclick="submitVote(${index})">
+              ${option}
+            </button>
+          `;
+        });
+      } else {
+        html += `
+          <div class="message success">
+            You already voted in this poll.
+          </div>
+        `;
+      }
+
+      html += renderResults();
+
+      app.innerHTML = html;
+    }
+
+    function renderResults() {
+      const counts = options.map(() => 0);
+
+      votes.forEach(vote => {
+        const index = getVoteOptionIndex(vote);
+        if (index >= 0 && counts[index] !== undefined) {
+          counts[index]++;
+        }
       });
 
-    } else {
+      const totalVotes = votes.length;
 
-      voteSectionEl.innerHTML = `
-        <div class="message success">
-          You already voted in this poll.
-        </div>
+      let html = `
+        <div class="results">
       `;
-    }
 
-    renderResults();
-  }
+      options.forEach((option, index) => {
+        const count = counts[index];
+        const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
 
-  function renderResults() {
-
-    const options = pollData.options || [];
-    const votes = pollData.votes || [];
-
-    const counts = {};
-
-    options.forEach(option => {
-      counts[option] = 0;
-    });
-
-    votes.forEach(vote => {
-      if (counts[vote.option] !== undefined) {
-        counts[vote.option]++;
-      }
-    });
-
-    const totalVotes = votes.length;
-
-    resultsEl.innerHTML = '';
-
-    options.forEach(option => {
-
-      const count = counts[option] || 0;
-
-      const percent = totalVotes > 0
-        ? Math.round((count / totalVotes) * 100)
-        : 0;
-
-      const row = document.createElement('div');
-      row.className = 'result-row';
-
-      row.innerHTML = `
-        <div class="result-label">
-          ${option} (${count})
-        </div>
-
-        <div class="bar-bg">
-          <div
-            class="bar-fill"
-            style="width:${percent}%"
-          >
-            ${percent}%
+        html += `
+          <div class="result-row">
+            <div class="result-label">${option} (${count})</div>
+            <div class="bar-bg">
+              <div class="bar-fill" style="width:${percent}%;">
+                ${percent}%
+              </div>
+            </div>
           </div>
+        `;
+      });
+
+      html += `
+          <div class="muted">Total votes: ${totalVotes}</div>
         </div>
       `;
 
-      resultsEl.appendChild(row);
-    });
-
-    totalVotesEl.textContent =
-      `Total votes: ${totalVotes}`;
-  }
-
-  async function submitVote(optionIndex) {
-
-    const voterId = getVoterId();
-
-    const selectedOption = pollData.options[optionIndex];
-
-    const updatedVotes = [
-      ...(pollData.votes || []),
-      {
-        voter_id: voterId,
-        option: selectedOption
-      }
-    ];
-
-    const { error } = await supabaseClient
-      .from('polls')
-      .update({
-        votes: updatedVotes
-      })
-      .eq('id', pollId);
-
-    if (error) {
-
-      console.error(error);
-
-      messageEl.className = 'message error';
-
-      messageEl.innerHTML =
-        'Vote failed. You may already have voted.';
-
-      return;
+      return html;
     }
 
-    pollData.votes = updatedVotes;
+    async function submitVote(optionIndex) {
+      const voterId = getVoterId();
+      const selectedOption = options[optionIndex];
 
-    messageEl.className = 'message success';
+      let insertResult = await supabaseClient
+        .from("poll_votes")
+        .insert({
+          poll_id: pollId,
+          voter_id: voterId,
+          option_index: optionIndex,
+          option_text: selectedOption
+        });
 
-    messageEl.innerHTML =
-      'Vote submitted successfully!';
+      if (insertResult.error) {
+        insertResult = await supabaseClient
+          .from("poll_votes")
+          .insert({
+            poll_id: pollId,
+            voter_id: voterId,
+            option_index: optionIndex
+          });
+      }
 
-    renderPoll();
-  }
+      if (insertResult.error) {
+        console.error(insertResult.error);
 
-  loadPoll();
-</script>
+        app.innerHTML += `
+          <div class="message error">
+            Vote failed. You may have already voted.
+          </div>
+        `;
+
+        return;
+      }
+
+      await loadPoll();
+    }
+
+    loadPoll();
+  </script>
 
 </body>
 </html>
