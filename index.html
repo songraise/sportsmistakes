@@ -385,11 +385,12 @@
 
       const { error } = await supabaseClient
         .from("votes")
-        .insert({
-          poll_id: pollId,
-          voter_id: voterId,
-          option_selected: selectedOption
-        });
+       .insert({
+  poll_id: pollId,
+  voter_id: voterId,
+  option_selected: selectedOption,
+  source: "web"
+});
 
       if (error) {
         console.error(error);
