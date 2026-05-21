@@ -301,9 +301,10 @@
 
       const { error } = await supabaseClient
         .from("votes")
-        .insert({
+       .insert({
   poll_id: pollId,
   voter_id: voterId,
+  vote: selectedOption,
   option_selected: selectedOption,
   source: "web"
 });
