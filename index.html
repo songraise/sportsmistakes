@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SportsMistakes Polls</title>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -19,6 +18,30 @@
       max-width: 1100px;
       margin: 0 auto;
       padding: 40px 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .notify-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     .hero {
@@ -40,6 +63,15 @@
       font-size: 1.15rem;
       line-height: 1.5;
       max-width: 600px;
+    }
+
+    .live-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #22c55e;
+      border-radius: 999px;
+      margin-right: 8px;
     }
 
     .phone {
@@ -94,6 +126,14 @@
       background: #475569;
     }
 
+    .message {
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      margin-top: 12px;
+      background: #14532d;
+    }
+
     .results {
       margin-top: 18px;
     }
@@ -130,21 +170,6 @@
       margin-top: 12px;
     }
 
-    .message {
-      padding: 12px;
-      border-radius: 10px;
-      font-weight: bold;
-      margin-top: 12px;
-    }
-
-    .success {
-      background: #14532d;
-    }
-
-    .error {
-      background: #7f1d1d;
-    }
-
     .open-link {
       display: inline-block;
       margin-top: 14px;
@@ -172,237 +197,285 @@
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <section class="hero">
-      <div>
-        <h1>Sports mistakes deserve a vote.</h1>
-        <p class="subtitle">
-          Vote on the worst calls, coaching decisions, player mistakes, and game-changing moments.
-        </p>
-      </div>
+  <div class="topbar">
+    <div class="brand">
+      <span class="live-dot"></span>SportsMistakes
+    </div>
 
-      <div class="phone">
-        <div class="phone-screen">
-          <div id="featuredPoll">Loading featured poll...</div>
-        </div>
-      </div>
-    </section>
-
-    <h2 class="section-title">Recent Polls</h2>
-    <div id="recentPolls">Loading polls...</div>
-
+    <button class="notify-btn" onclick="enableNotifications()">
+      Enable Poll Alerts
+    </button>
   </div>
 
-  <script>
-    const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
+  <section class="hero">
+    <div>
+      <h1>Sports mistakes deserve a vote.</h1>
+      <p class="subtitle">
+        Vote on the worst calls, coaching decisions, player mistakes, and game-changing moments.
+      </p>
+      <p class="muted">Auto-refreshing every 15 seconds.</p>
+    </div>
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <div class="phone">
+      <div class="phone-screen">
+        <div id="featuredPoll">Loading featured poll...</div>
+      </div>
+    </div>
+  </section>
 
-    const featuredPollEl = document.getElementById("featuredPoll");
-    const recentPollsEl = document.getElementById("recentPolls");
+  <h2 class="section-title">Recent Polls</h2>
+  <div id="recentPolls">Loading polls...</div>
 
-    let polls = [];
-    let allVotes = [];
+</div>
 
-    function getVoterId() {
-      let voterId = localStorage.getItem("sms_voter_id");
+<script>
+  const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
 
-      if (!voterId) {
-        voterId = crypto.randomUUID();
-        localStorage.setItem("sms_voter_id", voterId);
-      }
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      return voterId;
+  const featuredPollEl = document.getElementById("featuredPoll");
+  const recentPollsEl = document.getElementById("recentPolls");
+
+  let polls = [];
+  let allVotes = [];
+  let knownPollIds = new Set();
+  let firstLoadComplete = false;
+
+  function getVoterId() {
+    let voterId = localStorage.getItem("sms_voter_id");
+
+    if (!voterId) {
+      voterId = crypto.randomUUID();
+      localStorage.setItem("sms_voter_id", voterId);
     }
 
-    function getOptionsFromPoll(poll) {
-      return [
-        poll.option_1,
-        poll.option_2,
-        poll.option_3,
-        poll.option_4,
-        poll.option_5,
-        poll.option_6
-      ].filter(Boolean);
+    return voterId;
+  }
+
+  function getOptionsFromPoll(poll) {
+    return [
+      poll.option_1,
+      poll.option_2,
+      poll.option_3,
+      poll.option_4,
+      poll.option_5,
+      poll.option_6
+    ].filter(Boolean);
+  }
+
+  function getQuestionText(poll) {
+    return poll.question || poll.title || "Untitled poll";
+  }
+
+  function getVoteChoice(vote) {
+    return vote.option_selected || vote.vote || "";
+  }
+
+  function getVotesForPoll(pollId) {
+    return allVotes.filter(vote => vote.poll_id === pollId);
+  }
+
+  function hasAlreadyVoted(pollId) {
+    const voterId = getVoterId();
+    return allVotes.some(vote => vote.poll_id === pollId && vote.voter_id === voterId);
+  }
+
+  async function enableNotifications() {
+    if (!("Notification" in window)) {
+      alert("This browser does not support notifications.");
+      return;
     }
 
-    function getQuestionText(poll) {
-      return poll.question || poll.title || "Untitled poll";
+    const permission = await Notification.requestPermission();
+
+    if (permission === "granted") {
+      new Notification("SportsMistakes alerts enabled", {
+        body: "You’ll be notified when new polls appear while this site is open."
+      });
+    }
+  }
+
+  function maybeNotifyNewPolls(newPolls) {
+    if (!firstLoadComplete) return;
+    if (Notification.permission !== "granted") return;
+
+    newPolls.forEach(poll => {
+      new Notification("🚨 New SportsMistakes poll", {
+        body: getQuestionText(poll)
+      });
+    });
+  }
+
+  async function loadData() {
+    const { data: pollData, error: pollError } = await supabaseClient
+      .from("polls")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (pollError) {
+      console.error(pollError);
+      featuredPollEl.innerHTML = "Could not load polls.";
+      recentPollsEl.innerHTML = "Could not load polls.";
+      return;
     }
 
-    function getVoteChoice(vote) {
-      return vote.option_selected ||
-             vote.choice ||
-             vote.option ||
-             vote.option_text ||
-             vote.vote ||
-             "";
+    const freshPolls = pollData || [];
+
+    const newPolls = freshPolls.filter(poll => !knownPollIds.has(poll.id));
+
+    freshPolls.forEach(poll => knownPollIds.add(poll.id));
+
+    const { data: voteData, error: voteError } = await supabaseClient
+      .from("votes")
+      .select("*");
+
+    if (voteError) {
+      console.error(voteError);
+      allVotes = [];
+    } else {
+      allVotes = voteData || [];
     }
 
-    function getVotesForPoll(pollId) {
-      return allVotes.filter(vote => vote.poll_id === pollId);
+    polls = freshPolls;
+
+    renderFeaturedPoll();
+    renderRecentPolls();
+
+    maybeNotifyNewPolls(newPolls);
+
+    firstLoadComplete = true;
+  }
+
+  function renderFeaturedPoll() {
+    if (!polls.length) {
+      featuredPollEl.innerHTML = "No polls yet.";
+      return;
     }
 
-    function hasAlreadyVoted(pollId) {
-      const voterId = getVoterId();
-      return allVotes.some(vote => vote.poll_id === pollId && vote.voter_id === voterId);
+    featuredPollEl.innerHTML = renderPollCard(polls[0]);
+  }
+
+  function renderRecentPolls() {
+    if (!polls.length) {
+      recentPollsEl.innerHTML = "No polls yet.";
+      return;
     }
 
-    async function loadData() {
-      const { data: pollData, error: pollError } = await supabaseClient
-        .from("polls")
-        .select("*")
-        .order("created_at", { ascending: false });
+    recentPollsEl.innerHTML = polls.map(poll => renderPollCard(poll)).join("");
+  }
 
-      if (pollError) {
-        console.error(pollError);
-        featuredPollEl.innerHTML = "Could not load polls.";
-        recentPollsEl.innerHTML = "Could not load polls.";
-        return;
-      }
+  function renderPollCard(poll) {
+    const options = getOptionsFromPoll(poll);
+    const votes = getVotesForPoll(poll.id);
+    const alreadyVoted = hasAlreadyVoted(poll.id);
 
-      polls = pollData || [];
+    let html = `
+      <div class="poll-card">
+        <div class="poll-question">${getQuestionText(poll)}</div>
+    `;
 
-      const { data: voteData, error: voteError } = await supabaseClient
-        .from("votes")
-        .select("*");
-
-      if (voteError) {
-        console.error(voteError);
-        allVotes = [];
-      } else {
-        allVotes = voteData || [];
-      }
-
-      renderFeaturedPoll();
-      renderRecentPolls();
-    }
-
-    function renderFeaturedPoll() {
-      if (!polls.length) {
-        featuredPollEl.innerHTML = "No polls yet.";
-        return;
-      }
-
-      featuredPollEl.innerHTML = renderPollCard(polls[0], true);
-    }
-
-    function renderRecentPolls() {
-      if (!polls.length) {
-        recentPollsEl.innerHTML = "No polls yet.";
-        return;
-      }
-
-      recentPollsEl.innerHTML = polls.map(poll => renderPollCard(poll, false)).join("");
-    }
-
-    function renderPollCard(poll, compact) {
-      const options = getOptionsFromPoll(poll);
-      const votes = getVotesForPoll(poll.id);
-      const alreadyVoted = hasAlreadyVoted(poll.id);
-
-      let html = `
-        <div class="poll-card">
-          <div class="poll-question">${getQuestionText(poll)}</div>
-      `;
-
-      if (!alreadyVoted) {
-        options.forEach(option => {
-          html += `
-            <button class="option-btn" onclick="submitVote('${poll.id}', '${option.replace(/'/g, "\\'")}')">
-              ${option}
-            </button>
-          `;
-        });
-      } else {
+    if (!alreadyVoted) {
+      options.forEach(option => {
+        const safeOption = option.replace(/'/g, "\\'");
         html += `
-          <div class="message success">
-            You already voted in this poll.
-          </div>
+          <button class="option-btn" onclick="submitVote('${poll.id}', '${safeOption}')">
+            ${option}
+          </button>
         `;
-      }
-
-      html += renderResults(poll, votes);
-
+      });
+    } else {
       html += `
-          <a class="open-link" href="poll.html?id=${poll.id}">
-            Open poll page →
-          </a>
+        <div class="message">
+          You already voted in this poll.
         </div>
       `;
-
-      return html;
     }
 
-    function renderResults(poll, votes) {
-      const options = getOptionsFromPoll(poll);
-      const counts = {};
+    html += renderResults(poll, votes);
 
-      options.forEach(option => {
-        counts[option] = 0;
-      });
+    html += `
+        <a class="open-link" href="poll.html?id=${poll.id}">
+          Open poll page →
+        </a>
+      </div>
+    `;
 
-      votes.forEach(vote => {
-        const choice = getVoteChoice(vote);
+    return html;
+  }
 
-        if (counts[choice] !== undefined) {
-          counts[choice]++;
-        }
-      });
+  function renderResults(poll, votes) {
+    const options = getOptionsFromPoll(poll);
+    const counts = {};
 
-      const totalVotes = votes.length;
+    options.forEach(option => {
+      counts[option] = 0;
+    });
 
-      let html = `<div class="results">`;
+    votes.forEach(vote => {
+      const choice = getVoteChoice(vote);
 
-      options.forEach(option => {
-        const count = counts[option] || 0;
-        const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+      if (counts[choice] !== undefined) {
+        counts[choice]++;
+      }
+    });
 
-        html += `
-          <div class="result-row">
-            <div class="result-label">${option} (${count})</div>
-            <div class="bar-bg">
-              <div class="bar-fill" style="width:${percent}%;">
-                ${percent}%
-              </div>
+    const totalVotes = votes.length;
+
+    let html = `<div class="results">`;
+
+    options.forEach(option => {
+      const count = counts[option] || 0;
+      const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+
+      html += `
+        <div class="result-row">
+          <div class="result-label">${option} (${count})</div>
+          <div class="bar-bg">
+            <div class="bar-fill" style="width:${percent}%;">
+              ${percent}%
             </div>
           </div>
-        `;
-      });
-
-      html += `
-          <div class="muted">Total votes: ${totalVotes}</div>
         </div>
       `;
+    });
 
-      return html;
+    html += `
+        <div class="muted">Total votes: ${totalVotes}</div>
+      </div>
+    `;
+
+    return html;
+  }
+
+  async function submitVote(pollId, selectedOption) {
+    const voterId = getVoterId();
+
+    const { error } = await supabaseClient
+      .from("votes")
+      .insert({
+        poll_id: pollId,
+        voter_id: voterId,
+        vote: selectedOption,
+        option_selected: selectedOption,
+        source: "web"
+      });
+
+    if (error) {
+      console.error(error);
+      alert("Vote failed. You may have already voted.");
+      return;
     }
 
-    async function submitVote(pollId, selectedOption) {
-      const voterId = getVoterId();
+    await loadData();
+  }
 
-      const { error } = await supabaseClient
-        .from("votes")
-       .insert({
-  poll_id: pollId,
-  voter_id: voterId,
-  vote: selectedOption,
-  option_selected: selectedOption,
-  source: "web"
-});
-      if (error) {
-        console.error(error);
-        alert("Vote failed. You may have already voted.");
-        return;
-      }
+  loadData();
 
-      await loadData();
-    }
-
-    loadData();
-  </script>
+  setInterval(loadData, 15000);
+</script>
 
 </body>
 </html>
