@@ -388,10 +388,10 @@
        .insert({
   poll_id: pollId,
   voter_id: voterId,
+  vote: selectedOption,
   option_selected: selectedOption,
   source: "web"
 });
-
       if (error) {
         console.error(error);
         alert("Vote failed. You may have already voted.");
