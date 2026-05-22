@@ -356,15 +356,39 @@
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px;
       padding: 24px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 20px;
-      align-items: center;
     }
 
     .alert-card h2 {
       margin: 0 0 8px;
       font-size: 34px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .team-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: white;
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 13px;
+      transition: all .18s ease;
+    }
+
+    .team-btn:hover {
+      background: rgba(255,61,35,0.18);
+    }
+
+    .team-btn.active {
+      background: #ff3d23;
+      border-color: #ff3d23;
     }
 
     .toast-alert {
@@ -421,8 +445,7 @@
 
     @media (max-width: 1050px) {
       .hero,
-      .main-grid,
-      .alert-card {
+      .main-grid {
         grid-template-columns: 1fr;
       }
 
@@ -434,6 +457,12 @@
 
       .side-panel {
         max-width: 520px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
@@ -463,7 +492,6 @@
     }
   </style>
 </head>
-
 <body>
   <div class="wrap">
 
@@ -486,23 +514,42 @@
     <section class="hero">
       <div>
         <div class="eyebrow">LIVE POLLS • REAL FANS • INSTANT VERDICTS</div>
-        <h1>THE LIVE FAN VERDICT <em>ON EVERY BIG MOMENT.</em></h1>
+
+        <h1>
+          THE LIVE FAN VERDICT
+          <em>ON EVERY BIG MOMENT.</em>
+        </h1>
+
         <p class="sub">
-          Real-time sports polls during controversial calls, coaching disasters, referee chaos and fan meltdowns.
+          Real-time sports polls during controversial calls, coaching disasters,
+          referee chaos and fan meltdowns.
         </p>
 
         <div class="hero-actions">
-          <button class="alert-btn" onclick="enableNotifications()">JOIN LIVE ALERTS →</button>
-          <button class="secondary-btn" onclick="document.getElementById('live-polls').scrollIntoView({behavior:'smooth'})">SEE ACTIVE POLLS ⊙</button>
+          <button class="alert-btn" onclick="enableNotifications()">
+            JOIN LIVE ALERTS →
+          </button>
+
+          <button class="secondary-btn"
+            onclick="document.getElementById('live-polls').scrollIntoView({behavior:'smooth'})">
+            SEE ACTIVE POLLS ⊙
+          </button>
         </div>
 
-        <p class="muted">Live polls refresh automatically every 15 seconds.</p>
+        <p class="muted">
+          Live polls refresh automatically every 15 seconds.
+        </p>
       </div>
 
       <div class="phone">
         <div class="phone-screen">
-          <div class="muted"><span class="live-dot"></span>LIVE POLL</div>
-          <div id="featuredPoll">Loading live poll...</div>
+          <div class="muted">
+            <span class="live-dot"></span>LIVE POLL
+          </div>
+
+          <div id="featuredPoll">
+            Loading live poll...
+          </div>
         </div>
       </div>
 
@@ -525,15 +572,65 @@
     </main>
 
     <section class="alert-card" id="alerts">
-      <div>
-        <h2>Get the next controversy before the takes cool off.</h2>
-        <p class="muted">Browser alerts notify you when a new poll appears while the site is open. No SMS spam.</p>
+      <h2>Choose Your Teams</h2>
+
+      <p class="muted">
+        Get live alerts for controversial moments, blown calls and fan meltdowns.
+      </p>
+
+      <div class="team-grid">
+
+        <button class="team-btn" onclick="toggleTeam(this,'ANA')">Anaheim Ducks</button>
+        <button class="team-btn" onclick="toggleTeam(this,'BOS')">Boston Bruins</button>
+        <button class="team-btn" onclick="toggleTeam(this,'BUF')">Buffalo Sabres</button>
+        <button class="team-btn" onclick="toggleTeam(this,'CGY')">Calgary Flames</button>
+        <button class="team-btn" onclick="toggleTeam(this,'CAR')">Carolina Hurricanes</button>
+        <button class="team-btn" onclick="toggleTeam(this,'CHI')">Chicago Blackhawks</button>
+        <button class="team-btn" onclick="toggleTeam(this,'COL')">Colorado Avalanche</button>
+        <button class="team-btn" onclick="toggleTeam(this,'CBJ')">Columbus Blue Jackets</button>
+        <button class="team-btn" onclick="toggleTeam(this,'DAL')">Dallas Stars</button>
+        <button class="team-btn" onclick="toggleTeam(this,'DET')">Detroit Red Wings</button>
+        <button class="team-btn" onclick="toggleTeam(this,'EDM')">Edmonton Oilers</button>
+        <button class="team-btn" onclick="toggleTeam(this,'FLA')">Florida Panthers</button>
+        <button class="team-btn" onclick="toggleTeam(this,'LAK')">Los Angeles Kings</button>
+        <button class="team-btn" onclick="toggleTeam(this,'MIN')">Minnesota Wild</button>
+        <button class="team-btn" onclick="toggleTeam(this,'MTL')">Montreal Canadiens</button>
+        <button class="team-btn" onclick="toggleTeam(this,'NSH')">Nashville Predators</button>
+        <button class="team-btn" onclick="toggleTeam(this,'NJD')">New Jersey Devils</button>
+        <button class="team-btn" onclick="toggleTeam(this,'NYI')">New York Islanders</button>
+        <button class="team-btn" onclick="toggleTeam(this,'NYR')">New York Rangers</button>
+        <button class="team-btn" onclick="toggleTeam(this,'OTT')">Ottawa Senators</button>
+        <button class="team-btn" onclick="toggleTeam(this,'PHI')">Philadelphia Flyers</button>
+        <button class="team-btn" onclick="toggleTeam(this,'PIT')">Pittsburgh Penguins</button>
+        <button class="team-btn" onclick="toggleTeam(this,'SEA')">Seattle Kraken</button>
+        <button class="team-btn" onclick="toggleTeam(this,'SJS')">San Jose Sharks</button>
+        <button class="team-btn" onclick="toggleTeam(this,'STL')">St. Louis Blues</button>
+        <button class="team-btn" onclick="toggleTeam(this,'TBL')">Tampa Bay Lightning</button>
+        <button class="team-btn" onclick="toggleTeam(this,'TOR')">Toronto Maple Leafs</button>
+        <button class="team-btn" onclick="toggleTeam(this,'UTA')">Utah Mammoth</button>
+        <button class="team-btn" onclick="toggleTeam(this,'VAN')">Vancouver Canucks</button>
+        <button class="team-btn" onclick="toggleTeam(this,'VGK')">Vegas Golden Knights</button>
+        <button class="team-btn" onclick="toggleTeam(this,'WSH')">Washington Capitals</button>
+        <button class="team-btn" onclick="toggleTeam(this,'WPG')">Winnipeg Jets</button>
+
       </div>
-      <button class="alert-btn" onclick="enableNotifications()">ENABLE POLL ALERTS</button>
+
+      <div style="margin-top:22px;">
+        <button class="alert-btn" onclick="saveTeams()">
+          SAVE MY TEAMS 🚨
+        </button>
+      </div>
+
+      <p class="muted" style="margin-top:12px;">
+        No account required. Teams are saved on this device.
+      </p>
     </section>
 
     <footer>
-      <strong style="color:#ff3d23;">POWERED BY REAL FAN REACTIONS.</strong>
+      <strong style="color:#ff3d23;">
+        POWERED BY REAL FAN REACTIONS.
+      </strong>
+
       <div style="margin-top:12px;">
         <a href="privacy.html">Privacy</a>
         <a href="terms.html">Terms</a>
@@ -549,7 +646,10 @@
   const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
 
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
   const featuredPollEl = document.getElementById("featuredPoll");
   const recentPollsEl = document.getElementById("recentPolls");
@@ -562,14 +662,9 @@
   let firstLoadComplete = false;
   let soundUnlocked = false;
 
-  function getVoterId() {
-    let voterId = localStorage.getItem("sms_voter_id");
-    if (!voterId) {
-      voterId = crypto.randomUUID();
-      localStorage.setItem("sms_voter_id", voterId);
-    }
-    return voterId;
-  }
+  let selectedTeams = JSON.parse(
+    localStorage.getItem("favorite_teams") || "[]"
+  );
 
   function unlockSound() {
     soundUnlocked = true;
@@ -577,112 +672,87 @@
 
   document.addEventListener("click", unlockSound, { once: true });
 
-  function getOptionsFromPoll(poll) {
-    return [
-      poll.option_1,
-      poll.option_2,
-      poll.option_3,
-      poll.option_4,
-      poll.option_5,
-      poll.option_6
-    ].filter(Boolean);
-  }
+  function getVoterId() {
+    let voterId = localStorage.getItem("sms_voter_id");
 
-  function getQuestionText(poll) {
-    return poll.question || poll.title || "Untitled poll";
-  }
-
-  function getVoteChoice(vote) {
-    return vote.option_selected || vote.vote || "";
-  }
-
-  function getVotesForPoll(pollId) {
-    return allVotes.filter(vote => vote.poll_id === pollId);
-  }
-
-  function hasAlreadyVoted(pollId) {
-    const voterId = getVoterId();
-    return allVotes.some(vote => vote.poll_id === pollId && vote.voter_id === voterId);
-  }
-
-  function getPollStats(poll) {
-    const options = getOptionsFromPoll(poll);
-    const votes = getVotesForPoll(poll.id);
-    const counts = {};
-
-    options.forEach(option => {
-      counts[option] = 0;
-    });
-
-    votes.forEach(vote => {
-      const choice = getVoteChoice(vote);
-      if (counts[choice] !== undefined) {
-        counts[choice]++;
-      }
-    });
-
-    const totalVotes = votes.length;
-    let topOption = options[0] || "";
-    let topCount = 0;
-
-    options.forEach(option => {
-      if ((counts[option] || 0) > topCount) {
-        topOption = option;
-        topCount = counts[option] || 0;
-      }
-    });
-
-    const topPercent = totalVotes > 0 ? Math.round((topCount / totalVotes) * 100) : 0;
-
-    return {
-      options,
-      votes,
-      counts,
-      totalVotes,
-      topOption,
-      topCount,
-      topPercent
-    };
-  }
-
-  async function enableNotifications() {
-    unlockSound();
-
-    if (!("Notification" in window)) {
-      alert("This browser does not support browser notifications.");
-      return;
+    if (!voterId) {
+      voterId = crypto.randomUUID();
+      localStorage.setItem("sms_voter_id", voterId);
     }
 
-    const permission = await Notification.requestPermission();
+    return voterId;
+  }
 
-    if (permission === "granted") {
-      showToastMessage("🚨 Alerts enabled", "You’ll see new poll alerts while this page is open.");
-
-      try {
-        playAlertSound();
-      } catch (e) {
-        console.log("Sound unavailable until browser allows it.");
-      }
-
-      new Notification("SportsMistakes alerts enabled", {
-        body: "You’ll be notified when new polls appear while this site is open."
-      });
+  function toggleTeam(button, teamCode) {
+    if (selectedTeams.includes(teamCode)) {
+      selectedTeams = selectedTeams.filter(team => team !== teamCode);
+      button.classList.remove("active");
+    } else {
+      selectedTeams.push(teamCode);
+      button.classList.add("active");
     }
+  }
+
+  function saveTeams() {
+    localStorage.setItem(
+      "favorite_teams",
+      JSON.stringify(selectedTeams)
+    );
+
+    showToastMessage(
+      "🚨 Teams Saved",
+      selectedTeams.length
+        ? `Following: ${selectedTeams.join(", ")}`
+        : "No teams selected."
+    );
+
+    playAlertSound();
+  }
+
+  function restoreSelectedTeams() {
+    document.querySelectorAll(".team-btn").forEach(button => {
+      const onclickAttr = button.getAttribute("onclick");
+      const match = onclickAttr.match(/'([^']+)'/);
+
+      if (!match) return;
+
+      const teamCode = match[1];
+
+      if (selectedTeams.includes(teamCode)) {
+        button.classList.add("active");
+      }
+    });
   }
 
   function playAlertSound() {
     if (!soundUnlocked) return;
 
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioContext =
+      new (window.AudioContext || window.webkitAudioContext)();
+
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 
     oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+    oscillator.frequency.setValueAtTime(
+      880,
+      audioContext.currentTime
+    );
 
-    gainNode.gain.setValueAtTime(0.0001, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.18, audioContext.currentTime + 0.02);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.35);
+    gainNode.gain.setValueAtTime(
+      0.0001,
+      audioContext.currentTime
+    );
+
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.18,
+      audioContext.currentTime + 0.02
+    );
+
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.0001,
+      audioContext.currentTime + 0.35
+    );
 
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
@@ -711,7 +781,10 @@
 
     toast.innerHTML = `
       🚨 NEW POLL LIVE<br>
-      <span style="font-weight:700;">${getQuestionText(poll)}</span><br>
+      <span style="font-weight:700;">
+        ${getQuestionText(poll)}
+      </span><br>
+
       <button onclick="window.location.href='poll.html?id=${poll.id}'">
         Vote Now →
       </button>
@@ -719,15 +792,39 @@
 
     toast.style.display = "block";
 
-    try {
-      playAlertSound();
-    } catch (e) {
-      console.log("Sound blocked until user interacts with page.");
-    }
+    playAlertSound();
 
     setTimeout(() => {
       toast.style.display = "none";
     }, 7000);
+  }
+
+  async function enableNotifications() {
+    unlockSound();
+
+    if (!("Notification" in window)) {
+      alert("Browser notifications not supported.");
+      return;
+    }
+
+    const permission = await Notification.requestPermission();
+
+    if (permission === "granted") {
+      showToastMessage(
+        "🚨 Alerts Enabled",
+        "You’ll now get live poll alerts."
+      );
+
+      playAlertSound();
+
+      new Notification(
+        "SportsMistakes alerts enabled",
+        {
+          body:
+            "You’ll be notified when new polls appear."
+        }
+      );
+    }
   }
 
   function maybeNotifyNewPolls(newPolls) {
@@ -736,43 +833,129 @@
     newPolls.forEach(poll => {
       showToastAlert(poll);
 
-      if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("🚨 New SportsMistakes poll", {
-          body: getQuestionText(poll)
-        });
+      if (
+        "Notification" in window &&
+        Notification.permission === "granted"
+      ) {
+        new Notification(
+          "🚨 New SportsMistakes poll",
+          {
+            body: getQuestionText(poll)
+          }
+        );
       }
     });
   }
 
+  function getOptionsFromPoll(poll) {
+    return [
+      poll.option_1,
+      poll.option_2,
+      poll.option_3,
+      poll.option_4,
+      poll.option_5,
+      poll.option_6
+    ].filter(Boolean);
+  }
+
+  function getQuestionText(poll) {
+    return poll.question || poll.title || "Untitled poll";
+  }
+
+  function getVoteChoice(vote) {
+    return vote.option_selected || vote.vote || "";
+  }
+
+  function getVotesForPoll(pollId) {
+    return allVotes.filter(
+      vote => vote.poll_id === pollId
+    );
+  }
+
+  function hasAlreadyVoted(pollId) {
+    const voterId = getVoterId();
+
+    return allVotes.some(
+      vote =>
+        vote.poll_id === pollId &&
+        vote.voter_id === voterId
+    );
+  }
+
+  function getPollStats(poll) {
+    const options = getOptionsFromPoll(poll);
+    const votes = getVotesForPoll(poll.id);
+
+    const counts = {};
+
+    options.forEach(option => {
+      counts[option] = 0;
+    });
+
+    votes.forEach(vote => {
+      const choice = getVoteChoice(vote);
+
+      if (counts[choice] !== undefined) {
+        counts[choice]++;
+      }
+    });
+
+    const totalVotes = votes.length;
+
+    let topOption = options[0] || "";
+    let topCount = 0;
+
+    options.forEach(option => {
+      if ((counts[option] || 0) > topCount) {
+        topOption = option;
+        topCount = counts[option];
+      }
+    });
+
+    const topPercent =
+      totalVotes > 0
+        ? Math.round((topCount / totalVotes) * 100)
+        : 0;
+
+    return {
+      options,
+      votes,
+      counts,
+      totalVotes,
+      topOption,
+      topCount,
+      topPercent
+    };
+  }
+
   async function loadData() {
-    const { data: pollData, error: pollError } = await supabaseClient
-      .from("polls")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const { data: pollData, error: pollError } =
+      await supabaseClient
+        .from("polls")
+        .select("*")
+        .order("created_at", { ascending: false });
 
     if (pollError) {
       console.error(pollError);
-      featuredPollEl.innerHTML = "<p class='muted'>Could not load polls.</p>";
-      recentPollsEl.innerHTML = "<p class='muted'>Could not load polls.</p>";
       return;
     }
 
     const freshPolls = pollData || [];
-    const newPolls = freshPolls.filter(poll => !knownPollIds.has(poll.id));
 
-    freshPolls.forEach(poll => knownPollIds.add(poll.id));
+    const newPolls = freshPolls.filter(
+      poll => !knownPollIds.has(poll.id)
+    );
 
-    const { data: voteData, error: voteError } = await supabaseClient
-      .from("votes")
-      .select("*");
+    freshPolls.forEach(poll =>
+      knownPollIds.add(poll.id)
+    );
 
-    if (voteError) {
-      console.error(voteError);
-      allVotes = [];
-    } else {
-      allVotes = voteData || [];
-    }
+    const { data: voteData } =
+      await supabaseClient
+        .from("votes")
+        .select("*");
 
+    allVotes = voteData || [];
     polls = freshPolls;
 
     renderFeaturedPoll();
@@ -781,155 +964,169 @@
     renderFanMood();
 
     maybeNotifyNewPolls(newPolls);
+
     firstLoadComplete = true;
   }
 
   function renderFeaturedPoll() {
     if (!polls.length) {
-      featuredPollEl.innerHTML = "<p class='muted'>No polls yet.</p>";
+      featuredPollEl.innerHTML =
+        "<p class='muted'>No polls yet.</p>";
       return;
     }
 
-    featuredPollEl.innerHTML = renderPollCard(polls[0], true);
+    featuredPollEl.innerHTML =
+      renderPollCard(polls[0], true);
   }
 
   function renderRecentPolls() {
-    if (!polls.length) {
-      recentPollsEl.innerHTML = "<p class='muted'>No polls yet.</p>";
-      return;
-    }
-
     recentPollsEl.innerHTML = `
       <div class="live-grid">
-        ${polls.slice(0, 6).map(poll => renderPollCard(poll, false)).join("")}
+        ${polls
+          .slice(0, 6)
+          .map(poll => renderPollCard(poll))
+          .join("")}
       </div>
     `;
   }
 
   function renderTrendingNow() {
-    if (!polls.length) {
-      trendingNowEl.innerHTML = "<p class='muted'>No trending polls yet.</p>";
-      return;
-    }
+    if (!polls.length) return;
 
     const ranked = polls
-      .map(poll => ({ poll, stats: getPollStats(poll) }))
-      .sort((a, b) => {
-        if (b.stats.totalVotes !== a.stats.totalVotes) {
-          return b.stats.totalVotes - a.stats.totalVotes;
-        }
-        return b.stats.topPercent - a.stats.topPercent;
-      });
+      .map(poll => ({
+        poll,
+        stats: getPollStats(poll)
+      }))
+      .sort((a, b) =>
+        b.stats.totalVotes - a.stats.totalVotes
+      );
 
     const hottest = ranked[0];
-    const split = ranked.find(item => item.stats.totalVotes > 0 && item.stats.topPercent <= 55);
-    const landslide = ranked.find(item => item.stats.totalVotes > 0 && item.stats.topPercent >= 75);
 
-    let html = "";
-
-    html += renderTrendBox("Top Verdict", hottest.poll, hottest.stats);
-
-    if (landslide && landslide.poll.id !== hottest.poll.id) {
-      html += renderTrendBox("Landslide", landslide.poll, landslide.stats);
-    }
-
-    if (split && split.poll.id !== hottest.poll.id) {
-      html += renderTrendBox("Fanbase Split", split.poll, split.stats);
-    }
-
-    trendingNowEl.innerHTML = html;
-  }
-
-  function renderTrendBox(label, poll, stats) {
-    const percentText = stats.totalVotes > 0 ? `${stats.topPercent}%` : "0%";
-    const winnerText = stats.totalVotes > 0 ? `${stats.topOption}` : "Waiting for votes";
-
-    return `
+    trendingNowEl.innerHTML = `
       <div class="trend-box">
-        <div class="muted">${label}</div>
-        <div class="trend-percent">${percentText}</div>
-        <div class="trend-question">${getQuestionText(poll)}</div>
-        <div class="trend-meta">${winnerText} • ${stats.totalVotes} vote${stats.totalVotes === 1 ? "" : "s"}</div>
-        <a class="open-link" href="poll.html?id=${poll.id}">Open poll →</a>
+        <div class="muted">Top Verdict</div>
+
+        <div class="trend-percent">
+          ${hottest.stats.topPercent}%
+        </div>
+
+        <div class="trend-question">
+          ${getQuestionText(hottest.poll)}
+        </div>
+
+        <div class="trend-meta">
+          ${hottest.stats.totalVotes} votes
+        </div>
+
+        <a class="open-link"
+          href="poll.html?id=${hottest.poll.id}">
+          Open poll →
+        </a>
       </div>
     `;
   }
 
   function renderFanMood() {
-    if (!polls.length) {
-      fanMoodEl.innerHTML = "<p class='muted'>Waiting for fan votes.</p>";
-      return;
+    if (!polls.length) return;
+
+    const hottest = polls
+      .map(poll => getPollStats(poll))
+      .sort((a, b) => b.totalVotes - a.totalVotes)[0];
+
+    let mood = "LOW HEAT";
+    let explain =
+      "Fans are watching, but the room is calm.";
+
+    if (
+      hottest.totalVotes >= 10 &&
+      hottest.topPercent >= 80
+    ) {
+      mood = "FULL MELTDOWN";
+      explain =
+        "Fans are overwhelmingly on one side.";
+    } else if (
+      hottest.totalVotes >= 5 &&
+      hottest.topPercent <= 55
+    ) {
+      mood = "DIVIDED FANBASE";
+      explain =
+        "The crowd is split. Chaos energy.";
     }
 
-    const totalVotes = allVotes.length;
-
-    if (totalVotes === 0) {
-      fanMoodEl.innerHTML = `
-        <div class="mood-big">WAITING FOR CHAOS</div>
-        <p class="mood-explain">No fan verdicts yet. The mood will update once votes start coming in.</p>
-      `;
-      return;
-    }
-
-    const pollStats = polls.map(poll => getPollStats(poll));
-    const hottest = pollStats.sort((a, b) => b.totalVotes - a.totalVotes)[0];
-
-    let moodLabel = "LOW HEAT";
-    let explanation = "Fans are watching, but the room is still calm.";
-
-    if (hottest.totalVotes >= 10 && hottest.topPercent >= 80) {
-      moodLabel = "FULL MELTDOWN";
-      explanation = "Fans are heavily united on one side of the verdict.";
-    } else if (hottest.totalVotes >= 5 && hottest.topPercent >= 70) {
-      moodLabel = "HOT TAKE ZONE";
-      explanation = "One side is starting to dominate the conversation.";
-    } else if (hottest.totalVotes >= 2 && hottest.topPercent <= 55) {
-      moodLabel = "DIVIDED FANBASE";
-      explanation = "The crowd is split. This one has argument energy.";
-    } else if (hottest.totalVotes >= 1) {
-      moodLabel = "WARMING UP";
-      explanation = "Votes are coming in. The fan mood is starting to form.";
-    }
-
-    const score = Math.min(99, Math.max(1, Math.round((hottest.totalVotes * 8) + hottest.topPercent)));
+    const score = Math.min(
+      99,
+      Math.max(
+        1,
+        Math.round(
+          hottest.totalVotes * 8 +
+          hottest.topPercent
+        )
+      )
+    );
 
     fanMoodEl.innerHTML = `
-      <div class="mood-big">${moodLabel}</div>
-      <div class="mood-score">${score}</div>
-      <p class="mood-explain">${explanation}</p>
-      <p class="muted">Based on current vote totals and how one-sided the top active poll is.</p>
+      <div class="mood-big">${mood}</div>
+
+      <div class="mood-score">
+        ${score}
+      </div>
+
+      <p class="mood-explain">
+        ${explain}
+      </p>
+
+      <p class="muted">
+        Based on live voting intensity.
+      </p>
     `;
   }
 
-  function renderPollCard(poll, isFeatured) {
+  function renderPollCard(poll) {
     const stats = getPollStats(poll);
     const alreadyVoted = hasAlreadyVoted(poll.id);
 
     let html = `
-      <div class="poll-card ${isFeatured ? "featured" : ""}">
+      <div class="poll-card">
         <span class="live-badge">LIVE</span>
-        <div class="poll-question">${getQuestionText(poll)}</div>
+
+        <div class="poll-question">
+          ${getQuestionText(poll)}
+        </div>
     `;
 
     if (!alreadyVoted) {
       stats.options.forEach(option => {
-        const safeOption = option.replace(/'/g, "\\'");
+        const safeOption =
+          option.replace(/'/g, "\\'");
+
         html += `
-          <button class="option-btn" onclick="submitVote('${poll.id}', '${safeOption}')">
+          <button class="option-btn"
+            onclick="submitVote(
+              '${poll.id}',
+              '${safeOption}'
+            )">
             ${option}
           </button>
         `;
       });
     } else {
-      html += `<div class="message">You already voted in this poll.</div>`;
+      html += `
+        <div class="message">
+          You already voted in this poll.
+        </div>
+      `;
     }
 
     html += renderResults(stats);
 
     html += `
-        <a class="open-link" href="poll.html?id=${poll.id}">
-          Open poll page →
-        </a>
+      <a class="open-link"
+        href="poll.html?id=${poll.id}">
+        Open poll page →
+      </a>
+
       </div>
     `;
 
@@ -941,27 +1138,46 @@
 
     stats.options.forEach(option => {
       const count = stats.counts[option] || 0;
-      const percent = stats.totalVotes > 0 ? Math.round((count / stats.totalVotes) * 100) : 0;
+
+      const percent =
+        stats.totalVotes > 0
+          ? Math.round(
+              (count / stats.totalVotes) * 100
+            )
+          : 0;
 
       html += `
         <div class="result-row">
+
           <div class="result-label">
             <span>${option} (${count})</span>
             <span>${percent}%</span>
           </div>
+
           <div class="bar-bg">
-            <div class="bar-fill" style="width:${percent}%"></div>
+            <div class="bar-fill"
+              style="width:${percent}%">
+            </div>
           </div>
+
         </div>
       `;
     });
 
-    html += `<div class="muted">Total votes: ${stats.totalVotes}</div></div>`;
+    html += `
+      <div class="muted">
+        Total votes: ${stats.totalVotes}
+      </div>
+    </div>
+    `;
 
     return html;
   }
 
-  async function submitVote(pollId, selectedOption) {
+  async function submitVote(
+    pollId,
+    selectedOption
+  ) {
     unlockSound();
 
     const voterId = getVoterId();
@@ -978,14 +1194,21 @@
 
     if (error) {
       console.error(error);
-      alert("Vote failed. You may have already voted.");
+
+      alert(
+        "Vote failed. You may have already voted."
+      );
+
       return;
     }
 
     await loadData();
   }
 
+  restoreSelectedTeams();
+
   loadData();
+
   setInterval(loadData, 15000);
 </script>
 
