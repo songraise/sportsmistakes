@@ -8,14 +8,16 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       background:
-        radial-gradient(circle at 70% 20%, rgba(255, 61, 35, 0.14), transparent 28%),
-        linear-gradient(180deg, #050912 0%, #07111d 45%, #02050a 100%);
-      color: #fff;
+        radial-gradient(circle at 80% 10%, rgba(255, 61, 35, 0.18), transparent 28%),
+        linear-gradient(180deg, #040711 0%, #07111d 45%, #02050a 100%);
+      color: #ffffff;
       font-family: Impact, Haettenschweiler, "Arial Narrow Bold", Arial, sans-serif;
     }
 
@@ -27,61 +29,62 @@
 
     .nav {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      padding-bottom: 28px;
-      border-bottom: 1px solid rgba(255,255,255,.1);
+      align-items: center;
+      gap: 22px;
+      padding-bottom: 26px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
     .logo {
-      line-height: .85;
+      line-height: 0.85;
       font-size: 32px;
       letter-spacing: -1px;
     }
 
     .logo span {
-      color: #ff3d23;
       display: block;
+      color: #ff3d23;
       font-size: 44px;
       font-style: italic;
     }
 
     .tag {
+      margin-top: 8px;
       font-size: 12px;
       letter-spacing: 2px;
     }
 
     .navlinks {
       display: flex;
-      gap: 28px;
+      gap: 26px;
       font-family: Arial, sans-serif;
-      font-weight: 800;
       font-size: 13px;
+      font-weight: 900;
     }
 
     .navlinks a {
-      color: white;
+      color: #ffffff;
       text-decoration: none;
     }
 
-    .panic-btn {
+    .alert-btn {
       background: linear-gradient(135deg, #ff4b2b, #e52d1b);
-      color: white;
+      color: #ffffff;
       border: 0;
-      border-radius: 8px;
-      padding: 16px 24px;
+      border-radius: 9px;
+      padding: 15px 22px;
       font-weight: 900;
       cursor: pointer;
-      box-shadow: 0 14px 35px rgba(255,61,35,.28);
+      box-shadow: 0 14px 34px rgba(255,61,35,.26);
     }
 
     .hero {
       display: grid;
-      grid-template-columns: 1fr 420px 190px;
-      gap: 34px;
+      grid-template-columns: 1.1fr 420px 250px;
+      gap: 30px;
       align-items: center;
-      padding: 72px 0 52px;
+      padding: 66px 0 44px;
     }
 
     .eyebrow {
@@ -94,13 +97,13 @@
     h1 {
       margin: 0;
       font-size: clamp(52px, 8vw, 88px);
-      line-height: .84;
+      line-height: 0.84;
       letter-spacing: -2px;
     }
 
     h1 em {
-      color: #ff3d23;
       display: block;
+      color: #ff3d23;
       font-style: italic;
     }
 
@@ -110,53 +113,46 @@
       line-height: 1.45;
       max-width: 560px;
       margin-top: 24px;
-      font-weight: 700;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      margin-top: 32px;
-      gap: 12px;
-    }
-
-    .stat {
-      background: rgba(19, 34, 52, .75);
-      border: 1px solid rgba(255,255,255,.08);
-      padding: 18px;
-      text-align: center;
-    }
-
-    .stat b {
-      display: block;
-      font-size: 28px;
-    }
-
-    .stat small {
-      font-family: Arial, sans-serif;
-      font-weight: 900;
-      font-size: 11px;
+      font-weight: 800;
+      color: #f8fafc;
     }
 
     .hero-actions {
       display: flex;
       gap: 14px;
-      margin-top: 32px;
+      margin-top: 30px;
       flex-wrap: wrap;
     }
 
     .secondary-btn {
-      background: rgba(255,255,255,.06);
-      color: white;
-      border: 1px solid rgba(255,255,255,.25);
-      border-radius: 8px;
-      padding: 16px 24px;
+      background: rgba(255,255,255,0.06);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 9px;
+      padding: 15px 22px;
       font-weight: 900;
       cursor: pointer;
     }
 
+    .muted {
+      color: #cbd5e1;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .live-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #ff3d23;
+      border-radius: 50%;
+      margin-right: 8px;
+      box-shadow: 0 0 16px rgba(255,61,35,.9);
+    }
+
     .phone {
-      transform: rotate(8deg);
+      transform: rotate(7deg);
       background: #050912;
       border: 7px solid #1f2937;
       border-radius: 42px;
@@ -167,46 +163,120 @@
     .phone-screen {
       background: linear-gradient(180deg, #071625, #020711);
       border-radius: 30px;
-      padding: 24px;
-      min-height: 460px;
-      border: 1px solid rgba(255,255,255,.08);
+      padding: 22px;
+      min-height: 470px;
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
-    .live-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      background: #ff3d23;
-      border-radius: 50%;
-      margin-right: 8px;
+    .side-panel {
+      background: rgba(14, 28, 44, 0.86);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .side-panel h2 {
+      margin: 0 0 18px;
+      font-size: 30px;
+      line-height: 0.95;
+    }
+
+    .trend-box {
+      background: rgba(2, 6, 23, 0.55);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .trend-percent {
+      font-size: 42px;
+      color: #58e067;
+      line-height: 0.95;
+    }
+
+    .trend-question {
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-top: 8px;
+    }
+
+    .trend-meta {
+      margin-top: 8px;
+      color: #cbd5e1;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .section-card {
+      background: rgba(14, 28, 44, 0.9);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .section-card h2 {
+      font-size: 36px;
+      margin: 0 0 20px;
+    }
+
+    .live-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
     }
 
     .poll-card {
-      background: rgba(14, 28, 44, .9);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 10px;
-      padding: 20px;
+      background: rgba(7, 18, 31, 0.92);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 11px;
+      padding: 18px;
       margin-bottom: 16px;
     }
 
+    .poll-card.featured {
+      margin-top: 14px;
+    }
+
+    .live-badge {
+      display: inline-block;
+      color: #ffffff;
+      background: #ff3d23;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      border-radius: 999px;
+      padding: 5px 9px;
+      margin-bottom: 12px;
+    }
+
     .poll-question {
-      font-size: 24px;
-      line-height: 1.1;
+      font-size: 25px;
+      line-height: 1.08;
       margin-bottom: 16px;
     }
 
     .option-btn {
       width: 100%;
+      background: #35465b;
+      color: #ffffff;
       border: 0;
       border-radius: 8px;
       padding: 14px;
       margin: 7px 0;
-      background: #35465b;
-      color: white;
+      font-size: 16px;
       font-weight: 900;
       cursor: pointer;
       text-align: left;
-      font-size: 16px;
     }
 
     .option-btn:hover {
@@ -214,14 +284,14 @@
     }
 
     .message {
-      background: rgba(34,197,94,.17);
-      border: 1px solid rgba(34,197,94,.45);
+      background: rgba(34,197,94,0.16);
+      border: 1px solid rgba(34,197,94,0.46);
       color: #86efac;
       border-radius: 8px;
       padding: 12px;
       margin: 10px 0;
       font-family: Arial, sans-serif;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .results {
@@ -235,8 +305,8 @@
     .result-label {
       display: flex;
       justify-content: space-between;
-      font-size: 15px;
-      color: #fff;
+      gap: 12px;
+      font-size: 14px;
     }
 
     .bar-bg {
@@ -250,18 +320,7 @@
     .bar-fill {
       background: #58e067;
       height: 100%;
-      line-height: 20px;
-      text-align: right;
-      padding-right: 7px;
-      font-size: 12px;
       min-width: 0;
-    }
-
-    .muted {
-      color: #cbd5e1;
-      font-family: Arial, sans-serif;
-      font-weight: 700;
-      font-size: 13px;
     }
 
     .open-link {
@@ -273,155 +332,41 @@
       font-weight: 900;
     }
 
-    .channels {
-      font-family: Arial, sans-serif;
-      font-weight: 900;
-    }
-
-    .channels h3 {
-      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", Arial, sans-serif;
-      font-size: 25px;
-      line-height: .95;
-      margin-bottom: 22px;
-    }
-
-    .channel {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 16px 0;
-    }
-
-    .icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: #2563eb;
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-    }
-
-    .section-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 16px;
-      margin-top: 30px;
-    }
-
-    .panel {
-      background: rgba(14, 28, 44, .9);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 10px;
-      padding: 24px;
-      min-height: 250px;
-    }
-
-    .panel h2 {
-      font-size: 32px;
-      margin: 0 0 20px;
-    }
-
-    .verdict-big {
-      font-size: 76px;
+    .mood-big {
+      font-size: 48px;
       color: #ff3d23;
-      text-align: center;
-      line-height: .85;
+      line-height: 0.95;
+      margin-bottom: 10px;
     }
 
-    .panic-meter {
-      text-align: center;
-      padding-top: 20px;
+    .mood-score {
+      font-size: 90px;
+      line-height: 0.95;
+      margin: 18px 0 12px;
     }
 
-    .panic-number {
-      font-size: 76px;
-      margin-top: 20px;
-    }
-
-    .recent-list .poll-card {
-      padding: 16px;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      margin-top: 18px;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .feature {
-      padding: 26px 18px;
-      text-align: center;
-      background: rgba(8, 20, 32, .85);
-      border-right: 1px solid rgba(255,255,255,.08);
-    }
-
-    .feature:last-child {
-      border-right: 0;
-    }
-
-    .feature .emoji {
-      font-size: 34px;
-      margin-bottom: 12px;
-    }
-
-    .feature h3 {
-      margin: 0 0 10px;
-      font-size: 24px;
-    }
-
-    .feature p {
+    .mood-explain {
       font-family: Arial, sans-serif;
-      font-size: 14px;
-      line-height: 1.4;
-      margin: 0;
-      font-weight: 700;
+      color: #cbd5e1;
+      font-weight: 800;
+      line-height: 1.45;
     }
 
-    .signup {
-      display: grid;
-      grid-template-columns: 1fr 420px;
-      gap: 30px;
-      align-items: center;
+    .alert-card {
       margin-top: 18px;
-      background: rgba(14, 28, 44, .95);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 10px;
-      padding: 28px;
-    }
-
-    .signup h2 {
-      font-size: 36px;
-      margin: 0 0 8px;
-    }
-
-    .signup-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .signup input {
-      flex: 1;
-      border: 0;
-      border-radius: 7px;
-      padding: 16px;
-      font-size: 15px;
-    }
-
-    .fake-numbers {
+      background: rgba(14, 28, 44, 0.95);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 24px;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      text-align: center;
-      gap: 12px;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
     }
 
-    .fake-numbers b {
-      display: block;
-      font-size: 38px;
+    .alert-card h2 {
+      margin: 0 0 8px;
+      font-size: 34px;
     }
 
     footer {
@@ -433,33 +378,43 @@
 
     footer a {
       color: #94a3b8;
-      margin-right: 18px;
       text-decoration: none;
+      margin-right: 18px;
     }
 
-    @media (max-width: 980px) {
+    @media (max-width: 1050px) {
       .hero,
-      .section-grid,
-      .signup {
+      .main-grid,
+      .alert-card {
         grid-template-columns: 1fr;
-      }
-
-      .channels {
-        display: none;
       }
 
       .phone {
         transform: none;
-        max-width: 380px;
+        max-width: 390px;
         margin: 0 auto;
       }
 
-      .features {
+      .side-panel {
+        max-width: 520px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .navlinks {
+        display: none;
+      }
+
+      .live-grid {
         grid-template-columns: 1fr;
       }
 
-      .navlinks {
-        display: none;
+      .nav {
+        align-items: flex-start;
+      }
+
+      .alert-btn {
+        padding: 12px 14px;
       }
     }
   </style>
@@ -475,127 +430,66 @@
       </div>
 
       <div class="navlinks">
-        <a href="#polls">LIVE POLLS</a>
-        <a href="#verdicts">FAN VERDICTS</a>
-        <a href="#panic">PANIC METER</a>
-        <a href="#signup">PANIC LINE</a>
+        <a href="#live-polls">LIVE POLLS</a>
+        <a href="#trending">TRENDING</a>
+        <a href="#mood">FAN MOOD</a>
+        <a href="#alerts">ALERTS</a>
       </div>
 
-      <button class="panic-btn" onclick="enableNotifications()">JOIN THE PANIC LINE 💬</button>
+      <button class="alert-btn" onclick="enableNotifications()">JOIN LIVE ALERTS 🚨</button>
     </nav>
 
     <section class="hero">
       <div>
         <div class="eyebrow">LIVE POLLS • REAL FANS • INSTANT VERDICTS</div>
         <h1>THE LIVE FAN VERDICT <em>ON EVERY BIG MOMENT.</em></h1>
-        <p class="sub">Real fans. Real-time polls. No takes — just raw opinions when it matters most.</p>
-
-        <div class="stats">
-          <div class="stat"><b>👥</b><small>FANS PARTICIPATING</small></div>
-          <div class="stat"><b>📈</b><small>LIVE POLLS</small></div>
-          <div class="stat"><b>⚡</b><small>RESULTS IN SECONDS</small></div>
-          <div class="stat"><b>🏆</b><small>RANKED FANS</small></div>
-        </div>
+        <p class="sub">
+          Real-time sports polls during controversial calls, coaching disasters, referee chaos and fan meltdowns.
+        </p>
 
         <div class="hero-actions">
-          <button class="panic-btn" onclick="enableNotifications()">JOIN THE PANIC LINE →</button>
-          <button class="secondary-btn" onclick="document.getElementById('polls').scrollIntoView({behavior:'smooth'})">SEE LIVE POLL ⊙</button>
+          <button class="alert-btn" onclick="enableNotifications()">JOIN LIVE ALERTS →</button>
+          <button class="secondary-btn" onclick="document.getElementById('live-polls').scrollIntoView({behavior:'smooth'})">SEE ACTIVE POLLS ⊙</button>
         </div>
 
-        <p class="muted">Browser alerts enabled. Homepage auto-refreshes every 15 seconds.</p>
+        <p class="muted">Live polls refresh automatically every 15 seconds.</p>
       </div>
 
       <div class="phone">
         <div class="phone-screen">
           <div class="muted"><span class="live-dot"></span>LIVE POLL</div>
-          <div id="featuredPoll">Loading featured poll...</div>
+          <div id="featuredPoll">Loading live poll...</div>
         </div>
       </div>
 
-      <div class="channels">
-        <h3>ALL RESPONSES.<br>ONE LIVE<br>VERDICT.</h3>
-        <div class="channel"><div class="icon">💬</div> TEXT MESSAGE</div>
-        <div class="channel"><div class="icon">𝕏</div> X / TWITTER</div>
-        <div class="channel"><div class="icon">D</div> DISCORD</div>
-        <div class="channel"><div class="icon">F</div> FACEBOOK</div>
-        <div class="channel"><div class="icon">R</div> REDDIT</div>
-      </div>
+      <aside class="side-panel" id="trending">
+        <h2>🔥 Trending Now</h2>
+        <div id="trendingNow">Loading trending verdict...</div>
+      </aside>
     </section>
 
-    <section id="verdicts" class="section-grid">
-      <div class="panel">
-        <h2>Live Fan Verdict</h2>
-        <div class="verdict-big">50%</div>
-        <div style="text-align:center;font-size:28px;">YES VERDICT</div>
-        <p class="muted" style="text-align:center;">Live fan sentiment updates as votes come in.</p>
-        <button class="secondary-btn" onclick="document.getElementById('polls').scrollIntoView({behavior:'smooth'})" style="width:100%;margin-top:20px;">JOIN THE NEXT VOTE →</button>
-      </div>
-
-      <div class="panel" id="panic">
-        <h2>Panic Meter</h2>
-        <div class="panic-meter">
-          <div style="font-size:70px;">🌈</div>
-          <div class="panic-number">87</div>
-          <div style="color:#ff3d23;font-size:32px;">🚨 EXTREME PANIC</div>
-          <p class="muted">Fans are not happy. Somebody is melting down.</p>
-        </div>
-      </div>
-
-      <div class="panel recent-list" id="polls">
-        <h2>Recent Polls</h2>
+    <main class="main-grid">
+      <section class="section-card" id="live-polls">
+        <h2>Active Fan Verdicts</h2>
         <div id="recentPolls">Loading polls...</div>
-      </div>
-    </section>
+      </section>
 
-    <section class="features">
-      <div class="feature">
-        <div class="emoji">💰</div>
-        <h3>Sponsors & Partners</h3>
-        <p>Your brand in front of the most passionate fans in sports.</p>
-      </div>
-      <div class="feature">
-        <div class="emoji">♛</div>
-        <h3>Premium Membership</h3>
-        <p>Insider polls, early access, VIP rankings and more.</p>
-      </div>
-      <div class="feature">
-        <div class="emoji">📈</div>
-        <h3>Live Fan Data</h3>
-        <p>Real-time fan sentiment you can track, share and trust.</p>
-      </div>
-      <div class="feature">
-        <div class="emoji">🛒</div>
-        <h3>Fan Merch</h3>
-        <p>Wear your takes. Rep the chaos. Join the movement.</p>
-      </div>
-      <div class="feature">
-        <div class="emoji">🏆</div>
-        <h3>Fan Rankings</h3>
-        <p>Top voters. Big loyalty. Real fans get real recognition.</p>
-      </div>
-    </section>
+      <section class="section-card" id="mood">
+        <h2>Live Fan Mood</h2>
+        <div id="fanMood">Calculating fan mood...</div>
+      </section>
+    </main>
 
-    <section class="signup" id="signup">
+    <section class="alert-card" id="alerts">
       <div>
-        <h2>Join the Panic Line</h2>
-        <p class="muted">Get live polls, results and chaos straight to you.</p>
-        <div class="signup-row">
-          <input id="phoneInput" placeholder="Enter your mobile number" />
-          <button class="panic-btn" onclick="saveFan()">JOIN NOW 💬</button>
-        </div>
-        <p class="muted">For this prototype, signups are saved to Supabase. SMS terms will be added before texting users.</p>
+        <h2>Get the next controversy before the takes cool off.</h2>
+        <p class="muted">Browser alerts notify you when a new poll appears while the site is open. No SMS spam.</p>
       </div>
-
-      <div class="fake-numbers">
-        <div><b>100K+</b><small>Fans</small></div>
-        <div><b>1M+</b><small>Votes Cast</small></div>
-        <div><b>500+</b><small>Polls Run</small></div>
-        <div><b>100%</b><small>Passion</small></div>
-      </div>
+      <button class="alert-btn" onclick="enableNotifications()">ENABLE POLL ALERTS</button>
     </section>
 
     <footer>
-      <strong style="color:#ff3d23;">POWERED BY THE FANS. FUELED BY PASSION.</strong>
+      <strong style="color:#ff3d23;">POWERED BY REAL FAN REACTIONS.</strong>
       <div style="margin-top:12px;">
         <a href="privacy.html">Privacy</a>
         <a href="terms.html">Terms</a>
@@ -613,6 +507,8 @@
 
   const featuredPollEl = document.getElementById("featuredPoll");
   const recentPollsEl = document.getElementById("recentPolls");
+  const trendingNowEl = document.getElementById("trendingNow");
+  const fanMoodEl = document.getElementById("fanMood");
 
   let polls = [];
   let allVotes = [];
@@ -656,6 +552,46 @@
     return allVotes.some(vote => vote.poll_id === pollId && vote.voter_id === voterId);
   }
 
+  function getPollStats(poll) {
+    const options = getOptionsFromPoll(poll);
+    const votes = getVotesForPoll(poll.id);
+    const counts = {};
+
+    options.forEach(option => {
+      counts[option] = 0;
+    });
+
+    votes.forEach(vote => {
+      const choice = getVoteChoice(vote);
+      if (counts[choice] !== undefined) {
+        counts[choice]++;
+      }
+    });
+
+    const totalVotes = votes.length;
+    let topOption = options[0] || "";
+    let topCount = 0;
+
+    options.forEach(option => {
+      if ((counts[option] || 0) > topCount) {
+        topOption = option;
+        topCount = counts[option] || 0;
+      }
+    });
+
+    const topPercent = totalVotes > 0 ? Math.round((topCount / totalVotes) * 100) : 0;
+
+    return {
+      options,
+      votes,
+      counts,
+      totalVotes,
+      topOption,
+      topCount,
+      topPercent
+    };
+  }
+
   async function enableNotifications() {
     if (!("Notification" in window)) {
       alert("This browser does not support notifications.");
@@ -691,13 +627,14 @@
 
     if (pollError) {
       console.error(pollError);
-      featuredPollEl.innerHTML = "Could not load polls.";
-      recentPollsEl.innerHTML = "Could not load polls.";
+      featuredPollEl.innerHTML = "<p class='muted'>Could not load polls.</p>";
+      recentPollsEl.innerHTML = "<p class='muted'>Could not load polls.</p>";
       return;
     }
 
     const freshPolls = pollData || [];
     const newPolls = freshPolls.filter(poll => !knownPollIds.has(poll.id));
+
     freshPolls.forEach(poll => knownPollIds.add(poll.id));
 
     const { data: voteData, error: voteError } = await supabaseClient
@@ -712,8 +649,12 @@
     }
 
     polls = freshPolls;
+
     renderFeaturedPoll();
     renderRecentPolls();
+    renderTrendingNow();
+    renderFanMood();
+
     maybeNotifyNewPolls(newPolls);
     firstLoadComplete = true;
   }
@@ -733,21 +674,120 @@
       return;
     }
 
-    recentPollsEl.innerHTML = polls.slice(0, 5).map(poll => renderPollCard(poll, false)).join("");
+    recentPollsEl.innerHTML = `
+      <div class="live-grid">
+        ${polls.slice(0, 6).map(poll => renderPollCard(poll, false)).join("")}
+      </div>
+    `;
+  }
+
+  function renderTrendingNow() {
+    if (!polls.length) {
+      trendingNowEl.innerHTML = "<p class='muted'>No trending polls yet.</p>";
+      return;
+    }
+
+    const ranked = polls
+      .map(poll => ({ poll, stats: getPollStats(poll) }))
+      .sort((a, b) => {
+        if (b.stats.totalVotes !== a.stats.totalVotes) {
+          return b.stats.totalVotes - a.stats.totalVotes;
+        }
+        return b.stats.topPercent - a.stats.topPercent;
+      });
+
+    const hottest = ranked[0];
+    const split = ranked.find(item => item.stats.totalVotes > 0 && item.stats.topPercent <= 55);
+    const landslide = ranked.find(item => item.stats.totalVotes > 0 && item.stats.topPercent >= 75);
+
+    let html = "";
+
+    html += renderTrendBox("Top Verdict", hottest.poll, hottest.stats);
+
+    if (landslide && landslide.poll.id !== hottest.poll.id) {
+      html += renderTrendBox("Landslide", landslide.poll, landslide.stats);
+    }
+
+    if (split && split.poll.id !== hottest.poll.id) {
+      html += renderTrendBox("Fanbase Split", split.poll, split.stats);
+    }
+
+    trendingNowEl.innerHTML = html;
+  }
+
+  function renderTrendBox(label, poll, stats) {
+    const percentText = stats.totalVotes > 0 ? `${stats.topPercent}%` : "0%";
+    const winnerText = stats.totalVotes > 0 ? `${stats.topOption}` : "Waiting for votes";
+
+    return `
+      <div class="trend-box">
+        <div class="muted">${label}</div>
+        <div class="trend-percent">${percentText}</div>
+        <div class="trend-question">${getQuestionText(poll)}</div>
+        <div class="trend-meta">${winnerText} • ${stats.totalVotes} vote${stats.totalVotes === 1 ? "" : "s"}</div>
+        <a class="open-link" href="poll.html?id=${poll.id}">Open poll →</a>
+      </div>
+    `;
+  }
+
+  function renderFanMood() {
+    if (!polls.length) {
+      fanMoodEl.innerHTML = "<p class='muted'>Waiting for fan votes.</p>";
+      return;
+    }
+
+    const totalVotes = allVotes.length;
+
+    if (totalVotes === 0) {
+      fanMoodEl.innerHTML = `
+        <div class="mood-big">WAITING FOR CHAOS</div>
+        <p class="mood-explain">No fan verdicts yet. The mood will update once votes start coming in.</p>
+      `;
+      return;
+    }
+
+    const pollStats = polls.map(poll => getPollStats(poll));
+    const hottest = pollStats.sort((a, b) => b.totalVotes - a.totalVotes)[0];
+
+    let moodLabel = "LOW HEAT";
+    let explanation = "Fans are watching, but the room is still calm.";
+
+    if (hottest.totalVotes >= 10 && hottest.topPercent >= 80) {
+      moodLabel = "FULL MELTDOWN";
+      explanation = "Fans are heavily united on one side of the verdict.";
+    } else if (hottest.totalVotes >= 5 && hottest.topPercent >= 70) {
+      moodLabel = "HOT TAKE ZONE";
+      explanation = "One side is starting to dominate the conversation.";
+    } else if (hottest.totalVotes >= 2 && hottest.topPercent <= 55) {
+      moodLabel = "DIVIDED FANBASE";
+      explanation = "The crowd is split. This one has argument energy.";
+    } else if (hottest.totalVotes >= 1) {
+      moodLabel = "WARMING UP";
+      explanation = "Votes are coming in. The fan mood is starting to form.";
+    }
+
+    const score = Math.min(99, Math.max(1, Math.round((hottest.totalVotes * 8) + hottest.topPercent)));
+
+    fanMoodEl.innerHTML = `
+      <div class="mood-big">${moodLabel}</div>
+      <div class="mood-score">${score}</div>
+      <p class="mood-explain">${explanation}</p>
+      <p class="muted">Based on current vote totals and how one-sided the top active poll is.</p>
+    `;
   }
 
   function renderPollCard(poll, isFeatured) {
-    const options = getOptionsFromPoll(poll);
-    const votes = getVotesForPoll(poll.id);
+    const stats = getPollStats(poll);
     const alreadyVoted = hasAlreadyVoted(poll.id);
 
     let html = `
-      <div class="poll-card">
+      <div class="poll-card ${isFeatured ? "featured" : ""}">
+        <span class="live-badge">LIVE</span>
         <div class="poll-question">${getQuestionText(poll)}</div>
     `;
 
     if (!alreadyVoted) {
-      options.forEach(option => {
+      stats.options.forEach(option => {
         const safeOption = option.replace(/'/g, "\\'");
         html += `
           <button class="option-btn" onclick="submitVote('${poll.id}', '${safeOption}')">
@@ -759,7 +799,7 @@
       html += `<div class="message">You already voted in this poll.</div>`;
     }
 
-    html += renderResults(poll, votes);
+    html += renderResults(stats);
 
     html += `
         <a class="open-link" href="poll.html?id=${poll.id}">
@@ -771,23 +811,12 @@
     return html;
   }
 
-  function renderResults(poll, votes) {
-    const options = getOptionsFromPoll(poll);
-    const counts = {};
-
-    options.forEach(option => counts[option] = 0);
-
-    votes.forEach(vote => {
-      const choice = getVoteChoice(vote);
-      if (counts[choice] !== undefined) counts[choice]++;
-    });
-
-    const totalVotes = votes.length;
+  function renderResults(stats) {
     let html = `<div class="results">`;
 
-    options.forEach(option => {
-      const count = counts[option] || 0;
-      const percent = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+    stats.options.forEach(option => {
+      const count = stats.counts[option] || 0;
+      const percent = stats.totalVotes > 0 ? Math.round((count / stats.totalVotes) * 100) : 0;
 
       html += `
         <div class="result-row">
@@ -802,7 +831,8 @@
       `;
     });
 
-    html += `<div class="muted">Total votes: ${totalVotes}</div></div>`;
+    html += `<div class="muted">Total votes: ${stats.totalVotes}</div></div>`;
+
     return html;
   }
 
@@ -826,31 +856,6 @@
     }
 
     await loadData();
-  }
-
-  async function saveFan() {
-    const phone = document.getElementById("phoneInput").value.trim();
-
-    if (!phone) {
-      alert("Enter a phone number first.");
-      return;
-    }
-
-    const { error } = await supabaseClient
-      .from("fans")
-      .insert({
-        phone: phone,
-        source: "homepage"
-      });
-
-    if (error) {
-      console.error(error);
-      alert("Signup failed. Check your fans table columns.");
-      return;
-    }
-
-    alert("You joined the Panic Line.");
-    document.getElementById("phoneInput").value = "";
   }
 
   loadData();
