@@ -8,9 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -369,6 +367,45 @@
       font-size: 34px;
     }
 
+    .toast-alert {
+      position: fixed;
+      top: 22px;
+      right: 22px;
+      background: #ff3d23;
+      color: white;
+      padding: 18px 22px;
+      border-radius: 12px;
+      box-shadow: 0 18px 45px rgba(0,0,0,.35);
+      z-index: 9999;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      max-width: 340px;
+      display: none;
+      animation: slideIn .35s ease-out;
+    }
+
+    .toast-alert button {
+      margin-top: 10px;
+      background: white;
+      color: #111827;
+      border: 0;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
     footer {
       padding-top: 34px;
       color: #94a3b8;
@@ -415,6 +452,13 @@
 
       .alert-btn {
         padding: 12px 14px;
+      }
+
+      .toast-alert {
+        left: 18px;
+        right: 18px;
+        top: 18px;
+        max-width: none;
       }
     }
   </style>
@@ -499,6 +543,8 @@
 
   </div>
 
+  <div id="toastAlert" class="toast-alert"></div>
+
 <script>
   const SUPABASE_URL = "https://xhztytiobuhrhdwfmqnl.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoenR5dGlvYnVocmhkd2ZtcW5sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1OTEyMjcsImV4cCI6MjA5NDE2NzIyN30.PovmzhbLwNg1MYHsCiGqjhiUY52iwrWZUtyvNkVFi7I";
@@ -514,6 +560,7 @@
   let allVotes = [];
   let knownPollIds = new Set();
   let firstLoadComplete = false;
+  let soundUnlocked = false;
 
   function getVoterId() {
     let voterId = localStorage.getItem("sms_voter_id");
@@ -523,6 +570,12 @@
     }
     return voterId;
   }
+
+  function unlockSound() {
+    soundUnlocked = true;
+  }
+
+  document.addEventListener("click", unlockSound, { once: true });
 
   function getOptionsFromPoll(poll) {
     return [
@@ -593,29 +646,101 @@
   }
 
   async function enableNotifications() {
+    unlockSound();
+
     if (!("Notification" in window)) {
-      alert("This browser does not support notifications.");
+      alert("This browser does not support browser notifications.");
       return;
     }
 
     const permission = await Notification.requestPermission();
 
     if (permission === "granted") {
+      showToastMessage("🚨 Alerts enabled", "You’ll see new poll alerts while this page is open.");
+
+      try {
+        playAlertSound();
+      } catch (e) {
+        console.log("Sound unavailable until browser allows it.");
+      }
+
       new Notification("SportsMistakes alerts enabled", {
         body: "You’ll be notified when new polls appear while this site is open."
       });
     }
   }
 
+  function playAlertSound() {
+    if (!soundUnlocked) return;
+
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+
+    gainNode.gain.setValueAtTime(0.0001, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.18, audioContext.currentTime + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.35);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.35);
+  }
+
+  function showToastMessage(title, body) {
+    const toast = document.getElementById("toastAlert");
+
+    toast.innerHTML = `
+      ${title}<br>
+      <span style="font-weight:700;">${body}</span>
+    `;
+
+    toast.style.display = "block";
+
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 5000);
+  }
+
+  function showToastAlert(poll) {
+    const toast = document.getElementById("toastAlert");
+
+    toast.innerHTML = `
+      🚨 NEW POLL LIVE<br>
+      <span style="font-weight:700;">${getQuestionText(poll)}</span><br>
+      <button onclick="window.location.href='poll.html?id=${poll.id}'">
+        Vote Now →
+      </button>
+    `;
+
+    toast.style.display = "block";
+
+    try {
+      playAlertSound();
+    } catch (e) {
+      console.log("Sound blocked until user interacts with page.");
+    }
+
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 7000);
+  }
+
   function maybeNotifyNewPolls(newPolls) {
     if (!firstLoadComplete) return;
-    if (!("Notification" in window)) return;
-    if (Notification.permission !== "granted") return;
 
     newPolls.forEach(poll => {
-      new Notification("🚨 New SportsMistakes poll", {
-        body: getQuestionText(poll)
-      });
+      showToastAlert(poll);
+
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("🚨 New SportsMistakes poll", {
+          body: getQuestionText(poll)
+        });
+      }
     });
   }
 
@@ -837,6 +962,8 @@
   }
 
   async function submitVote(pollId, selectedOption) {
+    unlockSound();
+
     const voterId = getVoterId();
 
     const { error } = await supabaseClient
